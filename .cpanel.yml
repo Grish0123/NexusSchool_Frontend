@@ -1,0 +1,8 @@
+---
+deployment:
+  tasks:
+    # cPanel clones this repo into /home/nexusnepal/public_html and runs these
+    # tasks on deploy. The site is served from the built files in dist/, so we
+    # copy the contents of dist/ into the document root.
+    - export DEPLOYPATH=/home/nexusnepal/public_html/
+    - /bin/cp -R dist/. $DEPLOYPATH

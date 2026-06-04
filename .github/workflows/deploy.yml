@@ -33,10 +33,6 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        env:
-          # The live backend URL is baked into the bundle at build time.
-          # Set this in GitHub > Settings > Secrets and variables > Actions > Variables.
-          VITE_API_BASE: ${{ vars.VITE_API_BASE }}
         run: pnpm build
 
       - name: Deploy to cPanel via FTP
