@@ -1,0 +1,31 @@
+.appShell {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.loading {
+  min-height: 100vh;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 18px;
+  place-items: center;
+  color: #ffffff;
+  background: #071426;
+  font-size: 20px;
+  font-weight: 900;
+
+  img {
+    width: clamp(82px, 10vw, 124px);
+    height: clamp(82px, 10vw, 124px);
+    object-fit: contain;
+  }
+
+  span {
+    display: block;
+    color: #ffffff;
+    font-size: clamp(16px, 1.4vw, 20px);
+    font-weight: 900;
+    letter-spacing: 0.02em;
+  }
+}

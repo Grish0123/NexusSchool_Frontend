@@ -1,0 +1,66 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Nunito:wght@400;500;600;700;800;900&display=swap");
+
+:root {
+  --font-heading: "DM Sans", "Segoe UI", Arial, sans-serif;
+  --font-body: "DM Sans", "Segoe UI", Arial, sans-serif;
+  --button-height: 44px;
+  --button-radius: 8px;
+  --button-padding: 0 20px;
+  --button-bg: #0c2344;
+  --button-bg-hover: #12305a;
+  --button-color: #ffffff;
+  --button-border: #0c2344;
+  --button-shadow: 0 12px 28px rgba(12, 35, 68, 0.16);
+  --button-shadow-hover: 0 18px 36px rgba(12, 35, 68, 0.22);
+  --button-secondary-bg: #ffffff;
+  --button-secondary-bg-hover: #f7f9fc;
+  --button-secondary-color: #0c2344;
+  --button-secondary-border: rgba(12, 35, 68, 0.18);
+  --page-eyebrow-size: 12px;
+  --page-eyebrow-spacing: 0.12em;
+  --page-title-size: clamp(30px, 3.4vw, 46px);
+  --page-title-line-height: 1;
+  --page-title-gap: 10px;
+  --page-heading-padding-top: clamp(44px, 6vw, 76px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: #172033;
+  background: #ffffff;
+  font-family: var(--font-body);
+  line-height: 1.55;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
