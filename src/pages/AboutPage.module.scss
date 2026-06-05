@@ -67,8 +67,10 @@
 
 .aboutHero {
   position: relative;
-  min-height: 720px;
-  height: 100vh;
+  min-height: min(720px, calc(100vh - 70px));
+  min-height: min(720px, calc(100svh - 70px));
+  height: calc(100vh - 70px);
+  height: calc(100svh - 70px);
   display: grid;
   align-items: center;
   overflow: hidden;
@@ -650,8 +652,10 @@
 
 @media (max-width: 980px) {
   .aboutHero {
-    min-height: calc(100svh - 160px);
-    height: auto;
+    min-height: min(700px, calc(100vh - 72px));
+    min-height: min(700px, calc(100svh - 72px));
+    height: calc(100vh - 72px);
+    height: calc(100svh - 72px);
   }
 
   .aboutHeroCard {
@@ -684,8 +688,8 @@
 
 @media (max-width: 620px) {
   .aboutHero {
-    min-height: calc(100svh - 160px);
-    height: auto;
+    min-height: min(660px, calc(100vh - 72px));
+    min-height: min(660px, calc(100svh - 72px));
   }
 
   .aboutHeroInner {
@@ -736,8 +740,8 @@
 
 @media (max-width: 560px) {
   .aboutHero {
-    min-height: clamp(520px, 76svh, 620px);
-    height: auto;
+    min-height: min(620px, calc(100vh - 72px));
+    min-height: min(620px, calc(100svh - 72px));
   }
 }
 

@@ -5,6 +5,20 @@ import { imageValue, media } from "../utils/content";
 import styles from "./CardsPage.module.scss";
 
 const courseHeroImage = "/site-images/Nexus.png";
+const clubSlidingLogos = [
+  "/Clubs%20sliding%20logos/student-quality-circle-logo.jpg",
+  "/Clubs%20sliding%20logos/nmun.jpg",
+  "/Clubs%20sliding%20logos/nexus-technical-education-and-skill-development-center.jpg",
+  "/Clubs%20sliding%20logos/nexus-music-club.jpg",
+  "/Clubs%20sliding%20logos/nexus-music-club-2.jpg",
+  "/Clubs%20sliding%20logos/nexus-meditation-center-english.jpg",
+  "/Clubs%20sliding%20logos/nexus-literary-club.jpg",
+  "/Clubs%20sliding%20logos/nexus-english-club.jpg",
+  "/Clubs%20sliding%20logos/nexus-dance.jpg",
+  "/Clubs%20sliding%20logos/nexus-cricket-club.jpg",
+  "/Clubs%20sliding%20logos/nexus-basketball-club.jpg",
+  "/Clubs%20sliding%20logos/ipc-logo.jpg"
+];
 
 function CourseHero({ hero }) {
   return (
@@ -85,6 +99,32 @@ function CareerHero({ hero }) {
   );
 }
 
+function ClubLogoSlider() {
+  const logos = [...clubSlidingLogos, ...clubSlidingLogos];
+
+  return (
+    <Reveal className={styles.clubLogoPanel} direction="up" distance={54} kind="card">
+      <div className={styles.clubLogoHead}>
+        <span>Club Logos</span>
+        <h3>Explore Our Clubs</h3>
+      </div>
+      <div className={styles.clubLogoViewport} aria-label="Nexus club logos">
+        <div className={styles.clubLogoTrack}>
+          {logos.map((logo, index) => {
+            const label = logo.split("/").pop()?.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ") || "Club";
+
+            return (
+              <figure className={styles.clubLogoItem} key={`${logo}-${index}`} aria-hidden={index >= clubSlidingLogos.length}>
+                <img src={logo} alt={index < clubSlidingLogos.length ? `${label} club` : ""} />
+              </figure>
+            );
+          })}
+        </div>
+      </div>
+    </Reveal>
+  );
+}
+
 export function CardsPage({ hero, items, kind }) {
   return (
     <>
@@ -116,6 +156,7 @@ export function CardsPage({ hero, items, kind }) {
               );
             })}
           </div>
+          {kind === "club" && <ClubLogoSlider />}
         </div>
       </section>
     </>

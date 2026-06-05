@@ -1,6 +1,8 @@
 .heroShell {
-  height: 100vh;
-  min-height: 720px;
+  height: calc(100vh - 126px);
+  height: calc(100svh - 126px);
+  min-height: min(720px, calc(100vh - 126px));
+  min-height: min(720px, calc(100svh - 126px));
 }
 
 @keyframes revealUp {
@@ -53,7 +55,8 @@
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 720px;
+  min-height: min(720px, calc(100vh - 126px));
+  min-height: min(720px, calc(100svh - 126px));
   display: grid;
   align-items: center;
   overflow: hidden;
@@ -70,12 +73,28 @@
 }
 
 .heroSlide {
+  position: relative;
   flex: 0 0 100%;
   width: 100%;
   height: 100%;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(7, 20, 38, 0.1), rgba(7, 20, 38, 0.1)),
+    var(--hero-slide-image) center / cover no-repeat;
+}
+
+.heroSlideImage {
+  width: 100%;
+  height: 100%;
+  display: block;
   object-fit: cover;
   object-position: 70% center;
   filter: saturate(1.04);
+}
+
+.heroSlideImageContain {
+  object-fit: fill;
+  object-position: center;
 }
 
 .heroScrim {
@@ -97,7 +116,7 @@
   z-index: 1;
   width: min(38%, 560px);
   margin-left: max(clamp(28px, 7vw, 112px), calc((100vw - 1480px) / 2));
-  padding: clamp(34px, 6vh, 68px) 0 clamp(72px, 10vh, 110px);
+  padding: clamp(120px, 18vh, 190px) 0 clamp(28px, 4vh, 44px);
 
   span {
     color: #e4bd66;
@@ -190,7 +209,7 @@
 .dots {
   position: absolute;
   left: 50%;
-  bottom: clamp(74px, 10vh, 104px);
+  bottom: clamp(28px, 4.5vh, 48px);
   z-index: 2;
   transform: translateX(-50%);
   display: flex;
@@ -1425,17 +1444,17 @@
 
   .hero {
     min-height: clamp(520px, 76svh, 620px);
-    align-items: center;
+    align-items: end;
   }
 
-  .heroSlide {
-    object-position: 62% center;
+  .heroSlideImage {
+    object-position: 62% top;
   }
 
   .heroInner {
     margin: 0 16px;
     padding-top: 0;
-    padding-bottom: 64px;
+    padding-bottom: clamp(34px, 5svh, 48px);
 
     span {
       font-size: 10px;
@@ -1445,7 +1464,7 @@
     h1 {
       max-width: 320px;
       margin: 10px 0;
-      font-size: clamp(28px, 9vw, 38px);
+      font-size: clamp(27px, 8.6vw, 36px);
       line-height: 1.05;
     }
 
@@ -1471,7 +1490,10 @@
   }
 
   .dots {
-    bottom: 24px;
+    right: 18px;
+    bottom: 18px;
+    left: auto;
+    transform: none;
   }
 
   .aboutNexus {
@@ -1576,22 +1598,22 @@
 
 @media (max-height: 720px) and (max-width: 560px) {
   .heroInner {
-    padding-top: 16px;
-    padding-bottom: 78px;
+    padding-top: 0;
+    padding-bottom: 28px;
 
     h1 {
-      font-size: clamp(25px, 8vw, 34px);
+      font-size: clamp(24px, 7.6vw, 32px);
     }
 
     p {
       display: -webkit-box;
       overflow: hidden;
       -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
+      -webkit-line-clamp: 2;
     }
   }
 
   .heroActions {
-    margin-top: 14px;
+    margin-top: 12px;
   }
 }

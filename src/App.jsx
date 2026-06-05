@@ -12,7 +12,7 @@ import { HomePage } from "./pages/HomePage.jsx";
 import { NoticesPage } from "./pages/NoticesPage.jsx";
 import { useSiteData } from "./hooks/useSiteData";
 import { careerItems, clubs, courses, galleryAlbums, heroSlides, media, notices, pageHero } from "./utils/content";
-import { homeAdvantageImages, homeMomentImages, siteImages } from "./data/siteImages";
+import { siteImages } from "./data/siteImages";
 import styles from "./styles/App.module.scss";
 
 const PRELOAD_TIMEOUT = 10000;
@@ -41,13 +41,12 @@ function preloadImages(images) {
 
 function initialRouteImages(path, data) {
   if (path !== "/" || !data) return [];
+  const firstHero = heroSlides(data)[0]?.image_url;
 
   return [
     "/site-images/Logo Nexus.png",
-    ...heroSlides(data).map((slide) => slide.image_url),
-    ...homeMomentImages,
-    ...homeAdvantageImages,
-  ];
+    firstHero,
+  ].filter(Boolean);
 }
 
 function usePath() {

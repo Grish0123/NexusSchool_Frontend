@@ -26,7 +26,7 @@ export function GalleryPage({ data, items }) {
     return [mainImage, ...repeatedSideImages].filter(Boolean);
   }, [activeAlbum?.image, activeImages, items]);
   const mosaicMain = mosaicImages[0];
-  const mosaicSideImages = mosaicImages.slice(1, 7);
+  const mosaicSideImages = mosaicImages.slice(1, 8);
   const openViewer = (index) => {
     setViewer(activeAlbum);
     setViewerIndex(index);

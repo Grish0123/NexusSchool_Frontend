@@ -59,7 +59,7 @@ export function AdmissionsPage({ data }) {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
           aria-hidden="true"
         />
         <div className={styles.admissionHeroInner}>

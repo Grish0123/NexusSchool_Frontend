@@ -207,15 +207,20 @@ export function HomePage({ data }) {
         <div className={styles.hero}>
           <div className={styles.heroTrack} style={{ transform: `translateX(-${active * 100}%)` }}>
             {slides.map((item, index) => (
-              <img
-                alt={item.title}
+              <div
                 className={styles.heroSlide}
-                decoding="async"
-                fetchPriority={index === 0 ? "high" : "low"}
                 key={item.title}
-                loading={index === 0 ? "eager" : "lazy"}
-                src={media(item.image_url)}
-              />
+                style={{ "--hero-slide-image": `url(${media(item.image_url)})` }}
+              >
+                <img
+                  alt={item.title}
+                  className={`${styles.heroSlideImage} ${String(item.image_url).includes("glorious-") ? styles.heroSlideImageContain : ""}`}
+                  decoding="async"
+                  fetchPriority={index === 0 ? "high" : "low"}
+                  loading={index === 0 ? "eager" : "lazy"}
+                  src={media(item.image_url)}
+                />
+              </div>
             ))}
           </div>
           <div className={styles.heroScrim} />
@@ -387,7 +392,14 @@ export function HomePage({ data }) {
               const [name, quote, image] = item;
               return (
               <Reveal as="article" className={offset === 0 ? styles.activeTestimonial : styles.sideTestimonial} key={`${name}-${index}`} kind="card">
-                <img src={image} alt={name} />
+                <img
+                  src={image || siteImages.nexusHero}
+                  alt={name}
+                  onError={(event) => {
+                    event.currentTarget.onerror = null;
+                    event.currentTarget.src = siteImages.nexusHero;
+                  }}
+                />
                 <span>Testimonial</span>
                 <blockquote>{quote}</blockquote>
                 <h3>{name}</h3>

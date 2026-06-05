@@ -99,7 +99,7 @@
 
 .wisdomSide1 {
   top: clamp(148px, 11vw, 206px);
-  left: clamp(-104px, -5.5vw, -28px);
+  left: clamp(24px, 3vw, 58px);
   width: clamp(150px, 10vw, 230px);
   height: clamp(260px, 17vw, 340px);
 }
@@ -131,7 +131,7 @@
 
 .wisdomSide5 {
   top: clamp(148px, 11vw, 206px);
-  right: clamp(-104px, -5.5vw, -28px);
+  right: clamp(24px, 3vw, 58px);
   width: clamp(150px, 10vw, 230px);
   height: clamp(260px, 17vw, 340px);
   animation-delay: 260ms;
@@ -143,6 +143,15 @@
   width: clamp(270px, 18.4vw, 390px);
   height: clamp(168px, 12.5vw, 240px);
   animation-delay: 110ms;
+}
+
+.wisdomSide7 {
+  top: clamp(634px, 42vw, 804px);
+  right: clamp(210px, 13.8vw, 266px);
+  z-index: 3;
+  width: clamp(260px, 18.6vw, 360px);
+  height: clamp(160px, 11.6vw, 224px);
+  animation-delay: 180ms;
 }
 
 .gallerySection {
