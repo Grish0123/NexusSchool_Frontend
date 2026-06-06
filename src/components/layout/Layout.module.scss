@@ -40,10 +40,11 @@
 
   small {
     color: #c99b3b;
+    font-family: var(--font-nepali);
     font-size: 12px;
     font-weight: 900;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
   }
 }
 

@@ -15,7 +15,7 @@ export function Header({ activePath, config, social }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const navRoutes = routes.filter(([, href]) => href !== "/");
   const menuSocial = socialLinks(social).slice(0, 4);
-  const slogan = "Bringing World Class Education";
+  const slogan = "संस्कार सहितको शिक्षा";
 
   return (
     <header className={styles.header}>
