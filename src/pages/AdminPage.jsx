@@ -129,7 +129,15 @@ export function AdminPage({ data }) {
       headers: { "Content-Type": "application/json" },
       method: "POST"
     });
-    setStatus(response.ok ? "Saved successfully." : "Save failed.");
+    if (!response.ok) {
+      setStatus("Save failed.");
+      return;
+    }
+
+    const savedCms = await response.json();
+    setCms(savedCms);
+    window.dispatchEvent(new CustomEvent("nexus:cms-saved"));
+    setStatus("Saved successfully. Notices are updated.");
   }
 
   const setList = (key) => (items) => setCms((current) => ({ ...current, [key]: items }));
