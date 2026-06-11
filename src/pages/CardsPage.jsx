@@ -20,6 +20,18 @@ const clubSlidingLogos = [
   "/Clubs%20sliding%20logos/ipc-logo.jpg"
 ];
 
+function isMontessoriIpcCourse(item = {}) {
+  const title = item.title || item.name || "";
+  return /montessori/i.test(title) && /\bipc\b/i.test(title);
+}
+
+function courseDetailPath(item = {}) {
+  const title = item.title || item.name || "";
+  if (isMontessoriIpcCourse(item)) return "/courses/montessori-ipc";
+  if (/cambridge/i.test(title) || /\bncc\b/i.test(title) || /digi/i.test(title)) return "/courses/cambridge-assessment-english";
+  return "";
+}
+
 function CourseHero({ hero }) {
   return (
     <section className={styles.courseHero}>
@@ -58,7 +70,7 @@ function ClubHero({ hero }) {
           Nexus Clubs for Learners.
         </h1>
         <p>{hero.copy}</p>
-        <a href="#club-list" data-link>View Clubs</a>
+        <a href="/courses" data-link>View Courses</a>
       </Reveal>
       <div className={styles.clubSupplies} aria-hidden="true">
         {books.map(([label, image, className], index) => (
@@ -93,7 +105,7 @@ function CareerHero({ hero }) {
           <em>who shape futures</em>
         </h1>
         <p>{hero.copy}</p>
-        <a href="#career-openings" data-link>View Open Positions</a>
+        <a href="#career-openings">View Open Positions</a>
       </Reveal>
     </section>
   );
@@ -142,6 +154,7 @@ export function CardsPage({ hero, items, kind }) {
           <div className={styles.grid}>
             {items.map((item, index) => {
               const meta = item.category || item.type || item.duration;
+              const detailPath = courseDetailPath(item);
 
               return (
                 <Reveal as="article" className={styles.card} delay={revealDelay(index)} direction={index % 3 === 0 ? "left" : index % 3 === 1 ? "up" : "right"} key={`${item.title || item.name}-${index}`} kind="card">
@@ -150,7 +163,11 @@ export function CardsPage({ hero, items, kind }) {
                     {meta && <span>{meta}</span>}
                     <h3>{item.title || item.name}</h3>
                     <p>{item.description}</p>
-                    {kind === "course" && <a className={styles.textButton} href="/contact" data-link>Ask for Syllabus</a>}
+                    {kind === "course" && (
+                      <a className={styles.textButton} href={detailPath || "/contact"} data-link>
+                        {detailPath ? "View Details" : "Ask for Syllabus"}
+                      </a>
+                    )}
                   </div>
                 </Reveal>
               );

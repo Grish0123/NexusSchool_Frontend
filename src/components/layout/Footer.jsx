@@ -14,7 +14,9 @@ function SocialIcon({ name }) {
 
 export function Footer({ config, social }) {
   const schoolName = config?.school_name || "Nexus International School";
-  const slogan = "Bringing World Class Education";
+  const slogan = "Where Global Excellence Begins";
+  const mainPhone = "01-4990303 | 01-4991051";
+  const mainEmail = "info@nexus.edu.np";
   const footerSocial = socialLinks(social).slice(0, 4);
   const footerGroups = [
     ["Explore", routes.slice(0, 4)],
@@ -37,7 +39,7 @@ export function Footer({ config, social }) {
           <img src="/site-images/Logo Nexus.png" alt={`${schoolName} logo`} />
           <h2>{schoolName}</h2>
           <p>{slogan}</p>
-          <p>{config?.address || "Pepsicola Townplanning-32, Kathmandu"}</p>
+          <p>Pepsi-Cola Town Planning, Kathmandu</p>
           <div className={styles.socialIcons}>
             {footerSocial.map((item) => (
               <a href={item.url} key={item.url} rel="noreferrer" target="_blank" aria-label={item.platform_name || item.platform || "Social"}>
@@ -54,8 +56,12 @@ export function Footer({ config, social }) {
         ))}
         <Reveal as="section" delay={0.18} direction="right" kind="soft">
           <h3>Contact</h3>
-          <a href={`tel:${config?.contact_phone?.[0] || "01-4990303"}`}>{config?.contact_phone?.[0] || "01-4990303"}</a>
-          <a href={`mailto:${config?.contact_email || "nexusworldeducation@gmail.com"}`}>{config?.contact_email || "nexusworldeducation@gmail.com"}</a>
+          <p>Nexus International School</p>
+          <a href="tel:01-4990303">{mainPhone}</a>
+          <a href={`mailto:${mainEmail}`}>{mainEmail}</a>
+          <p>Nexus IPC Montessori</p>
+          <a href="tel:01-4990934">01-4990934</a>
+          <a href="mailto:admin@nexus.edu.np">admin@nexus.edu.np</a>
           <a className={styles.footerButton} href="/contact" data-link>Get in touch</a>
         </Reveal>
       </div>

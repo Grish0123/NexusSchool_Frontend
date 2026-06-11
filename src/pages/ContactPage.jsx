@@ -1,17 +1,34 @@
-import { FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
+import { FaBuilding, FaEnvelope, FaGlobe, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 import { Reveal, revealDelay } from "../components/common/Reveal.jsx";
 import styles from "./ContactPage.module.scss";
 
 export function ContactPage({ data }) {
-  const config = data.config || {};
-  const address = config.address || "Pepsicola Townplanning-32, Kathmandu";
-  const phone = config.contact_phone?.[0] || "01-4990303";
-  const email = config.contact_email || "nexusworldeducation@gmail.com";
-  const mapQuery = encodeURIComponent(`Nexus International Academy ${address}`);
+  const address = "Pepsi-Cola Town Planning, Kathmandu";
+  const phone = "01-4990303 | 01-4991051";
+  const email = "info@nexus.edu.np";
+  const schoolMapSrc = "https://maps.google.com/maps?q=Nexus%20International%20School%20Pepsi-Cola%20Town%20Planning%20Kathmandu&t=&z=16&ie=UTF8&iwloc=&output=embed";
   const contactCards = [
     ["Email Address", email, `mailto:${email}`, FaEnvelope],
-    ["Phone Number", phone, `tel:${phone}`, FaPhoneAlt],
-    ["Our Office", address, `https://www.google.com/maps/search/?api=1&query=${mapQuery}`, FaMapMarkerAlt],
+    ["Phone Number", phone, "tel:01-4990303", FaPhoneAlt],
+    ["Our Location", address, null, FaMapMarkerAlt],
+  ];
+  const campuses = [
+    {
+      address,
+      email,
+      name: "Nexus International School",
+      phone: "01-4990303 | 01-4991051",
+      tagline: "Where Excellence Begins!",
+      website: "www.nexus.edu.np"
+    },
+    {
+      address: "Khageshwori, Kathmandu",
+      email: "admin@nexus.edu.np",
+      name: "Nexus IPC Montessori",
+      phone: "01-4990934 | 01-4991051",
+      tagline: "The Foundation of Future Excellence!",
+      website: "www.nexus.edu.np"
+    }
   ];
 
   return (
@@ -30,34 +47,66 @@ export function ContactPage({ data }) {
                   key={label}
                   kind="card"
                 >
-                <a
-                  href={href}
-                  rel={label === "Our Office" ? "noreferrer" : undefined}
-                  target={label === "Our Office" ? "_blank" : undefined}
-                >
-                  <span className={styles.methodIcon}><Icon aria-hidden="true" /></span>
-                  <span>
-                    <small>{label}</small>
-                    <strong>{value}</strong>
-                  </span>
-                </a>
+                {href ? (
+                  <a href={href}>
+                    <span className={styles.methodIcon}><Icon aria-hidden="true" /></span>
+                    <span>
+                      <small>{label}</small>
+                      <strong>{value}</strong>
+                    </span>
+                  </a>
+                ) : (
+                  <div className={styles.methodStatic}>
+                    <span className={styles.methodIcon}><Icon aria-hidden="true" /></span>
+                    <span>
+                      <small>{label}</small>
+                      <strong>{value}</strong>
+                    </span>
+                  </div>
+                )}
                 </Reveal>
               ))}
             </div>
           </Reveal>
 
+          <Reveal as="section" className={styles.mapPanel} direction="up" distance={42} kind="card" aria-label="Nexus International School map">
+            <iframe
+              src={schoolMapSrc}
+              title="Nexus International School location map"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+          </Reveal>
+
           <div className={styles.contactGrid}>
             <Reveal
               as="div"
+              className={styles.campusPanel}
               direction="left"
-              kind="image"
+              kind="card"
             >
-            <iframe
-              title="Nexus International Academy location map"
-              src={`https://www.google.com/maps?q=${mapQuery}&output=embed`}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
+              <div className={styles.campusHead}>
+                <span>School Locations</span>
+                <h2>Contact Nexus</h2>
+              </div>
+              <div className={styles.campusList}>
+                {campuses.map((campus) => (
+                  <article className={styles.campusCard} key={campus.name}>
+                    <span className={styles.campusIcon}><FaBuilding aria-hidden="true" /></span>
+                    <div>
+                      <h3>{campus.name}</h3>
+                      <p>{campus.tagline}</p>
+                      <ul>
+                        <li><FaMapMarkerAlt aria-hidden="true" /> {campus.address}</li>
+                        <li><FaPhoneAlt aria-hidden="true" /> {campus.phone}</li>
+                        <li><FaEnvelope aria-hidden="true" /> <a href={`mailto:${campus.email}`}>{campus.email}</a></li>
+                        <li><FaGlobe aria-hidden="true" /> {campus.website}</li>
+                      </ul>
+                    </div>
+                  </article>
+                ))}
+              </div>
             </Reveal>
             <Reveal as="form" className={styles.contactForm} delay={0.1} direction="right" kind="card" action={`mailto:${email}`} method="post" encType="text/plain">
               <div className={styles.formHead}>

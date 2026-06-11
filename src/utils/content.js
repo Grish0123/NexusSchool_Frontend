@@ -201,16 +201,30 @@ export function courses(data) {
       {
         category: 'Language Growth',
         description:
-          'Confidence in English communication through reading, speaking, writing, and classroom support.',
+          'Global language fluency through Cambridge Assessment English, strengthening reading, speaking, writing, listening, and confident communication.',
         image_url: courseImages.english,
         title: 'Cambridge Assessment English Program',
       },
       {
-        category: 'Foundation Learning',
+        category: 'Early Years & Primary',
         description:
-          'Activity-based learning for young learners with care, structure, creativity, and strong learning habits.',
+          'International Primary Curriculum and Montessori learning for young learners, with activity-based lessons, care, structure, creativity, and strong habits.',
         image_url: courseImages.montessori,
-        title: 'Montessori and IPC Teaching',
+        title: 'Montessori and IPC Program',
+      },
+      {
+        category: 'Digital Fluency',
+        description:
+          'NCC UK Digi School and ICT learning prepare students with digital literacy, online safety, smart classroom exposure, robotics, and coding foundations.',
+        image_url: clubImages.computer,
+        title: 'NCC UK Digi School',
+      },
+      {
+        category: 'Research & Innovation',
+        description:
+          'R&D-based modules, STEAM, project work, SQC, and LRPA methods build creativity, research habits, problem solving, and critical thinking.',
+        image_url: siteImages.labor,
+        title: 'STEAM and R&D-Based Learning',
       },
     ],
     (course) => course.title || course.name,
@@ -224,9 +238,9 @@ export function clubs(data) {
       ...apiClubs,
       {
         description:
-          'A space for drawing, craft, performance, imagination, and confident expression.',
+          'Drawing, craft, performance, music, arts, drama, imagination, and confident expression with inspiration from national creative icons.',
         image_url: clubImages.art,
-        name: 'Art & Creativity Club',
+        name: 'Music, Arts & Performance',
       },
       {
         description: 'Technology exposure, digital confidence, and practical problem solving.',
@@ -242,7 +256,19 @@ export function clubs(data) {
       {
         description: 'Fitness, discipline, teamwork, leadership, and healthy competition.',
         image_url: clubImages.sports,
-        name: 'Sports Club',
+        name: 'Sports Excellence',
+      },
+      {
+        description:
+          'Cricket training, teamwork, discipline, and competitive confidence through the Nexus Cricket Club community.',
+        image_url: clubImages.sports,
+        name: 'Nexus Cricket Club',
+      },
+      {
+        description:
+          'Football participation and discipline inspired by Nexus Sankata Football Club, Nexus Cup, and valley-wide competitions.',
+        image_url: siteImages.stage,
+        name: 'Nexus Sankata Football Club',
       },
     ],
     (club) => club.name || club.title,
@@ -325,7 +351,7 @@ export function leadership(data) {
         author: 'R.B. Katwal',
         image_url: siteImages.principal,
         message:
-          "At Nexus, we combine innovation with tradition to build minds that think, create, and lead. Your child's bright future is our promise.",
+          "In the 21st century, education must meet global standards. At Nexus, we combine innovation with tradition to build minds that think, create, and lead. Your child's bright future is our promise.",
         priority: 2,
         title: 'Message from the Principal',
       },

@@ -4,6 +4,46 @@ import { leadership, media, pageHero } from "../utils/content";
 import { aboutHeroImages, aboutJourneyImages, siteImages } from "../data/siteImages";
 import styles from "./AboutPage.module.scss";
 
+const focusAreas = [
+  "21st Century Skills",
+  "Practical & Experiential Learning",
+  "Global Exposure",
+  "Personal Growth & Innovation"
+];
+
+const academicHighlights = [
+  {
+    items: ["Cambridge Assessment English", "International Primary Curriculum (IPC)", "NCC UK Digi School", "R&D-Based Modules"],
+    title: "Academic Excellence",
+    text: "A balanced academic journey builds language fluency, early years confidence, digital fluency, creativity, research habits, and critical thinking."
+  },
+  {
+    items: ["Activity-Based Learning", "Project & Research-Based Learning", "STEAM", "SQC", "LRPA Methods"],
+    title: "Signature Approaches",
+    text: "Students learn by doing, exploring, asking better questions, and connecting classroom learning with real-world application."
+  },
+  {
+    items: ["Robotics & Coding", "Smart Classrooms", "Digital Literacy & Safety", "NCC Digi School ICT Curriculum"],
+    title: "Tech & Innovation",
+    text: "Research-friendly IT infrastructure and guided digital programs prepare learners for a technology-driven future."
+  }
+];
+
+const beyondAcademics = [
+  {
+    title: "Creative & Leadership Growth",
+    text: "Music, arts, drama, performance, leadership training, communication development, and enhanced CCA/ECA integration help students grow beyond textbooks."
+  },
+  {
+    title: "Sports Excellence",
+    text: "Nexus Cricket Club, Nexus Sankata Football Club, Nexus Cup, and valley-wide competitions give students healthy challenge, teamwork, and discipline."
+  },
+  {
+    title: "Guidance From Icons",
+    text: "Students draw inspiration from national figures including Kunti Moktan and Sheetal Moktan for music and arts, and Upendra Mansingh for sports and discipline."
+  }
+];
+
 export function AboutPage({ data }) {
   const [activeHero, setActiveHero] = useState(0);
   const [storyProgress, setStoryProgress] = useState(0);
@@ -35,7 +75,7 @@ export function AboutPage({ data }) {
     }
   ];
   const journey = data.about?.about_journey?.[0] || {};
-  const intro = data.home?.about_section?.description || "Nexus School is committed to quality education that builds knowledge, creativity, confidence, and character. Our story begins with every learner’s curiosity and potential, supported by dedicated teachers, a caring environment, and meaningful learning experiences.";
+  const intro = data.home?.about_section?.description || "At Nexus International School, education is more than academics. We shape future-ready leaders who embody innovation, creativity, and values through a blend of national and international curricula, a world-class learning environment, curiosity, critical thinking, and global competence.";
   const introWords = useMemo(() => intro.split(/\s+/).filter(Boolean), [intro]);
   const highlightedIntroWords = Math.ceil(storyProgress * introWords.length);
   const journeyImages = aboutJourneyImages;
@@ -139,10 +179,10 @@ export function AboutPage({ data }) {
         <div className={`${styles.inner} ${styles.journeyShowcase}`}>
           <Reveal className={`${styles.sectionHead} ${styles.journeyHead}`}>
             <span>{journey.title || "Our Journey"}</span>
-            <h2>Built on values, sharpened by results.</h2>
-            <p>{journey.description || "Nexus stands on a strong foundation of academic care, disciplined learning, leadership, and family trust. From classroom confidence to public events and achievements, the school experience helps learners grow with purpose."}</p>
+            <h2>Where global excellence begins.</h2>
+            <p>{journey.description || "Nexus redefines education by integrating student-centered, activity-driven learning with global exposure. We nurture morally grounded, globally competent leaders who can think, create, and lead in the 21st century."}</p>
             <div className={styles.pills}>
-              {(data.home?.about_section?.features || ["Quality Education", "Experienced Teachers", "Modern Learning", "Student Confidence"]).map((feature) => (
+              {(data.home?.about_section?.features || focusAreas).map((feature) => (
                 <span key={feature}>{feature}</span>
               ))}
             </div>
@@ -150,6 +190,46 @@ export function AboutPage({ data }) {
           <div className={styles.journeyImageGrid}>
             {journeyImages.map((image, index) => (
               <Reveal as="img" delay={revealDelay(index, 0.07)} direction={index % 2 ? "right" : "left"} kind="image" src={image} alt={`Nexus journey ${index + 1}`} key={image} />
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className={styles.section}>
+        <div className={styles.inner}>
+          <Reveal className={`${styles.sectionHead} ${styles.centerHead}`}>
+            <span>Academic Model</span>
+            <h2>A curriculum built for confidence, fluency, and innovation.</h2>
+            <p>Nexus combines global academic programs with practical learning methods so students grow with knowledge, values, creativity, and digital readiness.</p>
+          </Reveal>
+          <div className={styles.academicGrid}>
+            {academicHighlights.map((item, index) => (
+              <Reveal as="article" className={styles.academicCard} delay={revealDelay(index)} direction={index === 0 ? "left" : index === 1 ? "up" : "right"} key={item.title} kind="card">
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+                <ul>
+                  {item.items.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className={styles.sectionMuted}>
+        <div className={styles.inner}>
+          <Reveal className={`${styles.sectionHead} ${styles.centerHead}`}>
+            <span>Beyond Academics</span>
+            <h2>Creativity, character, competition, and care.</h2>
+            <p>Learning at Nexus extends into performance, leadership, communication, sports, arts, and guided enrichment, supported by a balanced Day Boarder Program.</p>
+          </Reveal>
+          <div className={styles.beyondGrid}>
+            {beyondAcademics.map((item, index) => (
+              <Reveal as="article" className={styles.beyondCard} delay={revealDelay(index)} direction={index % 2 ? "right" : "left"} key={item.title} kind="soft">
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </Reveal>
             ))}
           </div>
         </div>

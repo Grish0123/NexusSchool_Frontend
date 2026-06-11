@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { FaBell, FaFileAlt, FaMapMarkerAlt } from "react-icons/fa";
 import { Reveal, revealDelay } from "../components/common/Reveal.jsx";
 import { clubs, courses, heroSlides, media, notices } from "../utils/content";
@@ -74,6 +75,25 @@ function QuickIcon({ type }) {
   );
 }
 
+const advantageBoxVariants = {
+  hidden: { y: -44, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.82,
+      ease: [0.16, 1, 0.3, 1],
+      staggerChildren: 0.09,
+      delayChildren: 0
+    }
+  }
+};
+
+const advantageChildVariants = {
+  hidden: { opacity: 0, y: -16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.64, ease: [0.16, 1, 0.3, 1] } }
+};
+
 export function HomePage({ data }) {
   const slides = heroSlides(data);
   const [active, setActive] = useState(0);
@@ -86,7 +106,7 @@ export function HomePage({ data }) {
   const slide = slides[active] || slides[0] || {};
   const latestNotice = notices(data)[0] || {};
   const about = data.home?.about_section || {};
-  const aboutText = about.description || "Nexus International School is a caring learning community where discipline, confidence, creativity, and strong academic habits grow together. Students are guided to build character, communicate with purpose, and prepare for every next step with clarity.";
+  const aboutText = about.description || "Nexus International School is where global excellence begins. We blend national and international curricula to shape future-ready learners with innovation, creativity, values, critical thinking, global competence, and strong academic habits.";
   const aboutWords = useMemo(() => aboutText.split(/\s+/).filter(Boolean), [aboutText]);
   const highlightedAboutWords = Math.ceil(aboutProgress * aboutWords.length);
   const stats = data.home?.stats?.length
@@ -321,7 +341,7 @@ export function HomePage({ data }) {
           <QuickIcon type="visit" />
           <div>
             <span>Visit Nexus</span>
-            <h2>{data.config?.address || "Pepsicola, Kathmandu"}</h2>
+            <h2>{data.config?.address || "Pepsi-Cola Town Planning, Kathmandu"}</h2>
             <a href="/contact" data-link>Contact office <span>→</span></a>
           </div>
         </Reveal>
@@ -355,7 +375,7 @@ export function HomePage({ data }) {
       </section>
 
       <section className={styles.advantage}>
-        <Reveal as="header" className={styles.advantageHeading}>
+        <Reveal as="header" amount={0.45} className={styles.advantageHeading} direction="down" distance={56} effect="translate" kind="soft">
           <span>Nexus Advantages</span>
           <h2>Experience the Nexus difference.</h2>
         </Reveal>
@@ -365,16 +385,28 @@ export function HomePage({ data }) {
             ["Confidence beyond books", "Events, clubs, presentations, and recognition moments help learners speak, perform, and lead.", homeAdvantageImages[1]],
             ["Learning with real support", "Teachers and families work together so every child feels noticed, encouraged, and ready for the next step.", homeAdvantageImages[2]],
             ["Activities with purpose", "Sports, creativity, teamwork, and school culture shape character along with academic progress.", homeAdvantageImages[3]]
-          ].map(([title, copy, image], index) => (
-            <article key={title}>
-              <Reveal delay={0.12} direction={index % 2 ? "right" : "left"} kind="card" style={{ "--reveal-delay": "140ms" }}>
-                <span>Nexus Advantage</span>
-                <h3>{title}</h3>
-                <p>{copy}</p>
-              </Reveal>
-              <Reveal as="img" delay={index % 2 ? 0.08 : 0} direction={index % 2 ? "left" : "right"} kind="image" src={image} alt={title} style={{ "--reveal-delay": `${index % 2 ? 80 : 0}ms` }} />
-            </article>
-          ))}
+          ].map(([title, copy, image], index) => {
+            const imageDirection = index % 2 ? "right" : "left";
+            const rowDelay = revealDelay(index, 0.08);
+            const boxOffset = index % 2 ? -120 : 120;
+
+            return (
+              <article key={title}>
+                <motion.div
+                  variants={advantageBoxVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.4, margin: "0px 0px -12% 0px" }}
+                  style={{ willChange: "transform" }}
+                >
+                  <motion.span variants={advantageChildVariants}>Nexus Advantage</motion.span>
+                  <motion.h3 variants={advantageChildVariants}>{title}</motion.h3>
+                  <motion.p variants={advantageChildVariants}>{copy}</motion.p>
+                </motion.div>
+                <Reveal amount={0.38} as="img" delay={rowDelay} direction={imageDirection} distance={120} effect="translate" kind="image" src={image} alt={title} style={{ "--reveal-delay": `${rowDelay * 1000}ms` }} />
+              </article>
+            );
+          })}
         </div>
       </section>
 

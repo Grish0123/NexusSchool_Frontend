@@ -44,6 +44,16 @@ const revealVariants = {
   }
 };
 
+const translateVariants = {
+  hidden: ({ direction, distance }) => ({
+    ...offsetFor(direction, distance)
+  }),
+  visible: {
+    x: 0,
+    y: 0
+  }
+};
+
 export const Reveal = forwardRef(function Reveal({
   amount = 0.22,
   as = "div",
@@ -52,6 +62,7 @@ export const Reveal = forwardRef(function Reveal({
   delay = 0,
   direction,
   distance,
+  effect = "reveal",
   kind = "text",
   once = true,
   style,
@@ -73,7 +84,7 @@ export const Reveal = forwardRef(function Reveal({
       whileInView="visible"
       viewport={{ once, amount }}
       custom={custom}
-      variants={revealVariants}
+      variants={effect === "translate" ? translateVariants : revealVariants}
       transition={{ delay, duration: 0.86, ease: [0.16, 1, 0.3, 1] }}
       style={{ willChange: "transform, opacity, filter", ...style }}
       {...props}

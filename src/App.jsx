@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Header } from "./components/layout/Header.jsx";
 import { Footer } from "./components/layout/Footer.jsx";
-import { WhatsAppButton } from "./components/layout/WhatsAppButton.jsx";
+import { AIChatButton } from "./components/layout/WhatsAppButton.jsx";
 import { AdminPage } from "./pages/AdminPage.jsx";
 import { AboutPage } from "./pages/AboutPage.jsx";
 import { AdmissionsPage } from "./pages/AdmissionsPage.jsx";
 import { CardsPage } from "./pages/CardsPage.jsx";
 import { ContactPage } from "./pages/ContactPage.jsx";
+import { CambridgeCourseDetailPage, CourseDetailPage } from "./pages/CourseDetailPage.jsx";
 import { GalleryPage } from "./pages/GalleryPage.jsx";
 import { HomePage } from "./pages/HomePage.jsx";
 import { NoticesPage } from "./pages/NoticesPage.jsx";
@@ -137,6 +138,8 @@ export function App() {
           kind="course"
         />
       ),
+      "/courses/cambridge-assessment-english": <CambridgeCourseDetailPage />,
+      "/courses/montessori-ipc": <CourseDetailPage />,
       "/clubs": (
         <CardsPage
           data={data}
@@ -198,7 +201,7 @@ export function App() {
       {!isAdmin && <Header activePath={path} config={data.config} social={data.social || []} />}
       {page}
       {!isAdmin && <Footer config={data.config} social={data.social || []} />}
-      {!isAdmin && <WhatsAppButton phone={data.config?.contact_phone?.[0]} />}
+      {!isAdmin && <AIChatButton />}
     </div>
   );
 }
