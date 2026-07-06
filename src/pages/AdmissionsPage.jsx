@@ -1,31 +1,32 @@
 import { useEffect, useState } from "react";
 import { Reveal, revealDelay } from "../components/common/Reveal.jsx";
-import { admissionFaqs, pageHero } from "../utils/content";
-import { admissionProcessImages, siteImages } from "../data/siteImages";
+import { admissionFaqs, defaultAdmissionRequirements, defaultAdmissionSteps, media, pageHero, videoMedia } from "../utils/content";
+import { siteImages } from "../data/siteImages";
 import styles from "./AdmissionsPage.module.scss";
 
 export function AdmissionsPage({ data }) {
   const [activeProcessStep, setActiveProcessStep] = useState(null);
   const [canPreviewProcessStep, setCanPreviewProcessStep] = useState(false);
+  const [isHeroVideoReady, setIsHeroVideoReady] = useState(false);
   const hero = pageHero(data, "admissions", {
     copy: data.admission?.timeline?.description || "Enroll now and give your child a strong foundation for a brighter future.",
     eyebrow: "Admissions",
     image_url: siteImages.see,
     title: "Admissions"
   });
-  const heroVideo = "/Nexus%20Ad.mp4";
+  const heroPoster = media(hero.image_url || siteImages.see);
+  const heroVideo = videoMedia(data.admission?.heroVideo);
   const steps = data.admission?.process_steps?.length
     ? data.admission.process_steps
-    : [
-      { description: "Contact the school office and share the learner's grade, parent details, and visit preference. Our team helps you understand seat availability, school routines, documents, and the best next step for your family.", step_number: 1, title: "Enquiry & Guidance" },
-      { description: "Visit Nexus, meet the team, observe the learning environment, and ask about academic support, discipline, student care, transport, activities, and the values that shape everyday school life.", step_number: 2, title: "Visit & Consultation" },
-      { description: "Submit the admission form with the requested documents so the office can verify records, confirm grade placement, and prepare the learner's admission file without unnecessary delays.", step_number: 3, title: "Form & Documents" },
-      { description: "Complete the final discussion, fee process, and enrollment confirmation. Families receive the guidance they need for joining dates, class routines, books, uniform, and school communication.", step_number: 4, title: "Confirmation & Enrollment" }
-    ];
-  const processImages = admissionProcessImages;
+    : defaultAdmissionSteps;
+  const processImages = steps.map((step, index) => media(step.image_url || step.image || defaultAdmissionSteps[index % defaultAdmissionSteps.length]?.image_url));
   const activeStep = canPreviewProcessStep && activeProcessStep !== null ? steps[activeProcessStep] : null;
-  const requirements = data.admission?.requirements?.[0]?.requirement || ["Birth certificate", "Previous school report", "Transfer certificate if applicable", "Passport-size photographs"];
+  const requirements = data.admission?.requirements?.[0]?.requirement || defaultAdmissionRequirements;
   const faqs = admissionFaqs(data);
+
+  useEffect(() => {
+    setIsHeroVideoReady(false);
+  }, [heroVideo]);
 
   useEffect(() => {
     const query = window.matchMedia("(min-width: 821px) and (hover: hover) and (pointer: fine)");
@@ -49,19 +50,33 @@ export function AdmissionsPage({ data }) {
     setActiveProcessStep((current) => (current === index ? null : index));
   }
 
+  function playHeroVideo(event) {
+    const video = event.currentTarget;
+    const playPromise = video.play();
+
+    if (playPromise?.catch) {
+      playPromise.catch(() => setIsHeroVideoReady(false));
+    }
+  }
+
   return (
     <>
-      <section className={styles.admissionHero}>
+      <section className={styles.admissionHero} style={{ "--admission-hero-poster": `url("${heroPoster}")` }}>
         <video
-          className={styles.admissionHeroVideo}
-          src={heroVideo}
+          className={`${styles.admissionHeroVideo} ${isHeroVideoReady ? styles.admissionHeroVideoReady : ""}`}
           autoPlay
           muted
           loop
           playsInline
-          preload="metadata"
+          onCanPlay={playHeroVideo}
+          onError={() => setIsHeroVideoReady(false)}
+          onPlaying={() => setIsHeroVideoReady(true)}
+          poster={heroPoster}
+          preload="auto"
           aria-hidden="true"
-        />
+        >
+          <source src={heroVideo} type="video/mp4" />
+        </video>
         <div className={styles.admissionHeroInner}>
           <Reveal as="article" className={styles.admissionHeroCard} amount={0.55} direction="left" distance={76}>
             <span>{hero.eyebrow}</span>

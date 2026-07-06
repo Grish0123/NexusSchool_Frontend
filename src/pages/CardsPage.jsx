@@ -28,7 +28,8 @@ function isMontessoriIpcCourse(item = {}) {
 function courseDetailPath(item = {}) {
   const title = item.title || item.name || "";
   if (isMontessoriIpcCourse(item)) return "/courses/montessori-ipc";
-  if (/cambridge/i.test(title) || /\bncc\b/i.test(title) || /digi/i.test(title)) return "/courses/cambridge-assessment-english";
+  if (/\bncc\b/i.test(title) || /digi/i.test(title)) return "/courses/ncc-digi-school";
+  if (/cambridge/i.test(title)) return "/courses/cambridge-assessment-english";
   return "";
 }
 
@@ -88,14 +89,19 @@ function ClubHero({ hero }) {
 }
 
 function CareerHero({ hero }) {
+  const portraits = hero.careerPhotos?.length ? hero.careerPhotos : careerImages;
+
   return (
     <section className={styles.careerHero}>
       <div className={styles.careerPortraits} aria-hidden="true">
-        {careerImages.map((image, index) => (
+        {portraits.map((item, index) => {
+          const image = typeof item === "string" ? item : item.image_url || item.image;
+          return (
           <span className={styles[`careerFace${index + 1}`]} key={image}>
-            <img src={image} alt="" />
+            <img src={media(image)} alt="" />
           </span>
-        ))}
+          );
+        })}
       </div>
       <Reveal className={styles.careerHeroInner} amount={0.55} direction="up" distance={64}>
         <span>{hero.eyebrow}</span>

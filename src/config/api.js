@@ -9,6 +9,7 @@ export const endpoints = {
   cmsLogin: "/api/cms/login",
   cmsLogout: "/api/cms/logout",
   cmsSession: "/api/cms/session",
+  cmsUpload: "/api/cms/upload",
   config: "/api/school-config/",
   courses: "/api/courses-page/",
   faqs: "/api/contact-faqs/",

@@ -54,7 +54,8 @@ export function AboutPage({ data }) {
     image_url: data.about?.hero_video?.image_url || siteImages.audience,
     title: "Learning with discipline, confidence, and care."
   });
-  const heroSlides = [
+  const isAboutHeroCmsControlled = Boolean(data.cms?.aboutHeroSlides?.length);
+  const heroSlides = isAboutHeroCmsControlled ? data.about.heroSlides : [
     {
       image: media(aboutHeroImages[0] || hero.image_url || siteImages.audience),
       title: hero.title,
@@ -78,7 +79,9 @@ export function AboutPage({ data }) {
   const intro = data.home?.about_section?.description || "At Nexus International School, education is more than academics. We shape future-ready leaders who embody innovation, creativity, and values through a blend of national and international curricula, a world-class learning environment, curiosity, critical thinking, and global competence.";
   const introWords = useMemo(() => intro.split(/\s+/).filter(Boolean), [intro]);
   const highlightedIntroWords = Math.ceil(storyProgress * introWords.length);
-  const journeyImages = aboutJourneyImages;
+  const journeyImages = data.about?.journeyImages?.length
+    ? data.about.journeyImages.map((item) => media(item.image_url || item.image))
+    : aboutJourneyImages;
   const leaders = leadership(data);
   const highlightedMessages = leaders.slice(0, 3);
 
@@ -120,7 +123,7 @@ export function AboutPage({ data }) {
       <section className={styles.aboutHero}>
         <div className={styles.aboutHeroTrack} style={{ transform: `translateX(-${activeHero * 100}%)` }}>
           {heroSlides.map((slide) => (
-            <img src={slide.image} alt="" aria-hidden="true" key={slide.title} />
+            <img src={media(slide.image || slide.image_url)} alt="" aria-hidden="true" key={`${slide.title}-${slide.image || slide.image_url}`} />
           ))}
         </div>
         <button
@@ -189,7 +192,7 @@ export function AboutPage({ data }) {
           </Reveal>
           <div className={styles.journeyImageGrid}>
             {journeyImages.map((image, index) => (
-              <Reveal as="img" delay={revealDelay(index, 0.07)} direction={index % 2 ? "right" : "left"} kind="image" src={image} alt={`Nexus journey ${index + 1}`} key={image} />
+              <Reveal as="img" delay={revealDelay(index, 0.07)} direction={index % 2 ? "right" : "left"} kind="image" src={media(image)} alt={`Nexus journey ${index + 1}`} key={`${image}-${index}`} />
             ))}
           </div>
         </div>

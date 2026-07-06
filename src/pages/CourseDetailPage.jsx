@@ -1,5 +1,6 @@
 import { Reveal, revealDelay } from "../components/common/Reveal.jsx";
 import { admissionProcessImages, courseImages, siteImages } from "../data/siteImages";
+import { media } from "../utils/content";
 import styles from "./CourseDetailPage.module.scss";
 
 const montessoriBenefits = [
@@ -95,22 +96,129 @@ const factFrameworks = [
   }
 ];
 
-export function CourseDetailPage() {
+function splitItems(value, fallback) {
+  if (!value) return fallback;
+  return String(value)
+    .split(/\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [heading, ...copy] = line.split("|").map((part) => part.trim());
+      return [heading, copy.join(" | ")];
+    });
+}
+
+function splitRows(value, fallback) {
+  if (!value) return fallback;
+  return String(value)
+    .split(/\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => line.split("|").map((part) => part.trim()));
+}
+
+function courseDetailCms(data, key, fallback) {
+  const item = (data?.cms?.courseDetails || []).find((detail) => detail.key === key) || {};
+  return { ...fallback, ...item };
+}
+
+const montessoriDetail = {
+  benefitOneImage: admissionProcessImages[0],
+  benefitOneItems: montessoriBenefits.map(([heading, copy]) => `${heading} | ${copy}`).join("\n"),
+  benefitOneTitle: "Montessori Teaching",
+  benefitTwoImage: admissionProcessImages[1],
+  benefitTwoItems: ipcBenefits.map(([heading, copy]) => `${heading} | ${copy}`).join("\n"),
+  benefitTwoTitle: "IPC Teaching",
+  bottomSectionEyebrow: "Why The Blend Works",
+  bottomSectionImage: siteImages.audience,
+  bottomSectionItems: blendedReasons.map(([heading, copy]) => `${heading} | ${copy}`).join("\n"),
+  bottomSectionTitle: "Strong foundations, wider understanding.",
+  extraSectionOneEyebrow: "Targeted Learning Outcomes",
+  extraSectionOneItems: outcomes.map((item) => `${item.approach} | ${item.method} | ${item.example}`).join("\n"),
+  extraSectionOneTitle: "Different methods, clear progress.",
+  finalCopy: "When combined, they create a powerful synergy: Montessori builds strong foundations of independence and curiosity, and IPC channels that energy into structured, measurable outcomes aligned with global standards.",
+  finalEyebrow: "Final Insight",
+  finalTitle: "Montessori builds curiosity. IPC channels it.",
+  heroCopy: "Montessori and IPC teaching both emphasize child-centered learning, but they achieve outcomes in different ways. Montessori focuses on independence and experiential learning, while IPC emphasizes global awareness and structured thematic units.",
+  heroEyebrow: "Montessori and IPC Program",
+  heroImage: courseImages.montessori,
+  heroTitle: "Child-centered learning with global outcomes.",
+  introCopy: "Together, Montessori and IPC create a balanced approach that nurtures academic success, social-emotional growth, and targeted learning outcomes. Montessori nurtures how children learn, while IPC defines what they learn.",
+  introEyebrow: "Balanced Foundation",
+  introTitle: "A program built for academic, emotional, and social growth.",
+  key: "montessori-ipc"
+};
+
+const cambridgeDetail = {
+  benefitOneImage: admissionProcessImages[2],
+  benefitOneItems: cambridgeBenefits.map(([heading, copy]) => `${heading} | ${copy}`).join("\n"),
+  benefitOneTitle: "Cambridge English Benefits",
+  benefitTwoImage: siteImages.labor,
+  benefitTwoItems: digiBenefits.map(([heading, copy]) => `${heading} | ${copy}`).join("\n"),
+  benefitTwoTitle: "NCC Digi School Benefits",
+  bottomSectionEyebrow: "Fact Framework",
+  bottomSectionItems: factFrameworks.map((framework) => `${framework.feature} | ${framework.rows.map(([label, value]) => `${label}: ${value}`).join("; ")}`).join("\n"),
+  bottomSectionTitle: "Program focus at a glance.",
+  extraSectionOneEyebrow: "Cambridge Progression Levels",
+  extraSectionOneImage: siteImages.principal,
+  extraSectionOneItems: cambridgeLevels.map(([name, level, copy]) => `${name} | ${level} | ${copy}`).join("\n"),
+  extraSectionOneTitle: "A clear pathway from first steps to mastery.",
+  extraSectionTwoEyebrow: "NCC Education Digi School",
+  extraSectionTwoImage: siteImages.vicePrincipal,
+  extraSectionTwoItems: digiLevels.map(([name, level, copy]) => `${name} | ${level} | ${copy}`).join("\n"),
+  extraSectionTwoTitle: "Computing pathways for future-ready digital innovators.",
+  finalCopy: "Cambridge English builds internationally recognized communication ability, while NCC Digi School equips learners with computing knowledge, creativity, and future-ready digital skills.",
+  finalEyebrow: "Final Insight",
+  finalTitle: "Language confidence and digital fluency prepare students for the world ahead.",
+  heroCopy: "Cambridge Assessment English is part of the University of Cambridge and provides internationally recognized English language qualifications designed to assess real-life communication skills.",
+  heroEyebrow: "Cambridge Assessment English Program",
+  heroImage: courseImages.english,
+  heroTitle: "International English skills for confident learners.",
+  introCopy: "The program supports academic, professional, and personal growth by helping learners use English confidently in study, work, travel, and everyday communication.",
+  introEyebrow: "Program Overview",
+  introTitle: "Real-life communication skills with global academic value.",
+  key: "cambridge-assessment-english"
+};
+
+const nccDetail = {
+  ...cambridgeDetail,
+  benefitOneImage: siteImages.labor,
+  benefitOneItems: digiBenefits.map(([heading, copy]) => `${heading} | ${copy}`).join("\n"),
+  benefitOneTitle: "NCC Digi School Benefits",
+  benefitTwoImage: courseImages.english,
+  benefitTwoItems: cambridgeBenefits.map(([heading, copy]) => `${heading} | ${copy}`).join("\n"),
+  benefitTwoTitle: "Cambridge English Support",
+  bottomSectionItems: factFrameworks.map((framework) => `${framework.feature} | ${framework.rows.map(([label, value]) => `${label}: ${value}`).join("; ")}`).join("\n"),
+  finalCopy: "NCC Digi School helps students build practical computing knowledge, creativity, online safety, and globally useful digital confidence.",
+  finalTitle: "Digital fluency prepares students for the world ahead.",
+  heroCopy: "NCC UK Digi School and ICT learning prepare students with digital literacy, online safety, smart classroom exposure, robotics, and coding foundations.",
+  heroEyebrow: "NCC UK Digi School",
+  heroImage: "/Clubs/Computer.jpeg",
+  heroTitle: "Future-ready digital skills for confident learners.",
+  introCopy: "The program builds confidence with technology through structured computing, practical digital literacy, online safety, and creative problem solving.",
+  introTitle: "Computing knowledge with practical value.",
+  key: "ncc-digi-school"
+};
+
+export function CourseDetailPage({ data }) {
+  const detail = courseDetailCms(data, "montessori-ipc", montessoriDetail);
+  const benefitOneItems = splitItems(detail.benefitOneItems, montessoriBenefits);
+  const benefitTwoItems = splitItems(detail.benefitTwoItems, ipcBenefits);
+  const detailOutcomes = splitRows(detail.extraSectionOneItems, outcomes.map((item) => [item.approach, item.method, item.example]));
+  const detailReasons = splitItems(detail.bottomSectionItems, blendedReasons);
+
   return (
     <>
       <section className={styles.hero}>
         <div className={styles.heroInner}>
           <Reveal className={styles.heroCopy} direction="left" distance={58}>
-            <span>Montessori and IPC Program</span>
-            <h1>Child-centered learning with global outcomes.</h1>
-            <p>
-              Montessori and IPC teaching both emphasize child-centered learning, but they achieve outcomes in different ways.
-              Montessori focuses on independence and experiential learning, while IPC emphasizes global awareness and structured thematic units.
-            </p>
+            <span>{detail.heroEyebrow}</span>
+            <h1>{detail.heroTitle}</h1>
+            <p>{detail.heroCopy}</p>
             <a href="/contact" data-link>Ask About Admission</a>
           </Reveal>
           <Reveal as="figure" className={styles.heroImage} delay={0.12} direction="right" kind="image">
-            <img src={courseImages.montessori} alt="Montessori and IPC classroom learning" />
+            <img src={media(detail.heroImage)} alt="Montessori and IPC classroom learning" />
           </Reveal>
         </div>
       </section>
@@ -118,12 +226,9 @@ export function CourseDetailPage() {
       <section className={styles.introSection}>
         <div className={styles.inner}>
           <Reveal className={styles.introPanel} kind="card">
-            <span>Balanced Foundation</span>
-            <h2>A program built for academic, emotional, and social growth.</h2>
-            <p>
-              Together, Montessori and IPC create a balanced approach that nurtures academic success, social-emotional growth,
-              and targeted learning outcomes. Montessori nurtures how children learn, while IPC defines what they learn.
-            </p>
+            <span>{detail.introEyebrow}</span>
+            <h2>{detail.introTitle}</h2>
+            <p>{detail.introCopy}</p>
           </Reveal>
         </div>
       </section>
@@ -131,8 +236,8 @@ export function CourseDetailPage() {
       <section className={styles.benefitsSection}>
         <div className={styles.inner}>
           <div className={styles.benefitGrid}>
-            <BenefitColumn title="Montessori Teaching" items={montessoriBenefits} image={admissionProcessImages[0]} />
-            <BenefitColumn title="IPC Teaching" items={ipcBenefits} image={admissionProcessImages[1]} />
+            <BenefitColumn title={detail.benefitOneTitle} items={benefitOneItems} image={media(detail.benefitOneImage)} />
+            <BenefitColumn title={detail.benefitTwoTitle} items={benefitTwoItems} image={media(detail.benefitTwoImage)} />
           </div>
         </div>
       </section>
@@ -140,16 +245,16 @@ export function CourseDetailPage() {
       <section className={styles.outcomesSection}>
         <div className={styles.inner}>
           <Reveal className={styles.sectionHead}>
-            <span>Targeted Learning Outcomes</span>
-            <h2>Different methods, clear progress.</h2>
+            <span>{detail.extraSectionOneEyebrow || "Targeted Learning Outcomes"}</span>
+            <h2>{detail.extraSectionOneTitle || "Different methods, clear progress."}</h2>
           </Reveal>
           <div className={styles.outcomeGrid}>
-            {outcomes.map((item, index) => (
-              <Reveal as="article" className={styles.outcomeCard} delay={revealDelay(index, 0.06)} direction={index === 1 ? "up" : index === 0 ? "left" : "right"} key={item.approach} kind="card">
-                <span>{item.approach}</span>
+            {detailOutcomes.map(([approach, method, example], index) => (
+              <Reveal as="article" className={styles.outcomeCard} delay={revealDelay(index, 0.06)} direction={index === 1 ? "up" : index === 0 ? "left" : "right"} key={approach} kind="card">
+                <span>{approach}</span>
                 <h3>How outcomes are achieved</h3>
-                <p>{item.method}</p>
-                <strong>{item.example}</strong>
+                <p>{method}</p>
+                <strong>{example}</strong>
               </Reveal>
             ))}
           </div>
@@ -159,13 +264,13 @@ export function CourseDetailPage() {
       <section className={styles.blendSection}>
         <div className={styles.inner}>
           <Reveal as="figure" className={styles.blendImage} direction="left" kind="image">
-            <img src={siteImages.audience} alt="Students learning together at Nexus" />
+            <img src={media(detail.bottomSectionImage)} alt="Students learning together at Nexus" />
           </Reveal>
           <Reveal className={styles.blendCopy} direction="right" distance={54}>
-            <span>Why The Blend Works</span>
-            <h2>Strong foundations, wider understanding.</h2>
+            <span>{detail.bottomSectionEyebrow}</span>
+            <h2>{detail.bottomSectionTitle}</h2>
             <div className={styles.reasonList}>
-              {blendedReasons.map(([title, copy], index) => (
+              {detailReasons.map(([title, copy], index) => (
                 <article key={title} style={{ "--delay": `${index * 70}ms` }}>
                   <h3>{title}</h3>
                   <p>{copy}</p>
@@ -179,12 +284,9 @@ export function CourseDetailPage() {
       <section className={styles.finalSection}>
         <div className={styles.inner}>
           <Reveal className={styles.finalPanel} kind="card">
-            <span>Final Insight</span>
-            <h2>Montessori builds curiosity. IPC channels it.</h2>
-            <p>
-              When combined, they create a powerful synergy: Montessori builds strong foundations of independence and curiosity,
-              and IPC channels that energy into structured, measurable outcomes aligned with global standards.
-            </p>
+            <span>{detail.finalEyebrow}</span>
+            <h2>{detail.finalTitle}</h2>
+            <p>{detail.finalCopy}</p>
           </Reveal>
         </div>
       </section>
@@ -192,22 +294,26 @@ export function CourseDetailPage() {
   );
 }
 
-export function CambridgeCourseDetailPage() {
+function LanguageDigitalDetailPage({ data, detailKey = "cambridge-assessment-english", fallback = cambridgeDetail }) {
+  const detail = courseDetailCms(data, detailKey, fallback);
+  const benefitOneItems = splitItems(detail.benefitOneItems, cambridgeBenefits);
+  const benefitTwoItems = splitItems(detail.benefitTwoItems, digiBenefits);
+  const progressionOne = splitRows(detail.extraSectionOneItems, cambridgeLevels);
+  const progressionTwo = splitRows(detail.extraSectionTwoItems, digiLevels);
+  const frameworkItems = splitItems(detail.bottomSectionItems, factFrameworks.map((framework) => [framework.feature, framework.rows.map(([label, value]) => `${label}: ${value}`).join("; ")]));
+
   return (
     <>
       <section className={styles.hero}>
         <div className={styles.heroInner}>
           <Reveal className={styles.heroCopy} direction="left" distance={58}>
-            <span>Cambridge Assessment English Program</span>
-            <h1>International English skills for confident learners.</h1>
-            <p>
-              Cambridge Assessment English is part of the University of Cambridge and provides internationally recognized
-              English language qualifications designed to assess real-life communication skills.
-            </p>
+            <span>{detail.heroEyebrow}</span>
+            <h1>{detail.heroTitle}</h1>
+            <p>{detail.heroCopy}</p>
             <a href="/contact" data-link>Ask About The Program</a>
           </Reveal>
           <Reveal as="figure" className={styles.heroImage} delay={0.12} direction="right" kind="image">
-            <img src={courseImages.english} alt="Cambridge English learning at Nexus" />
+            <img src={media(detail.heroImage)} alt="Cambridge English learning at Nexus" />
           </Reveal>
         </div>
       </section>
@@ -215,12 +321,9 @@ export function CambridgeCourseDetailPage() {
       <section className={styles.introSection}>
         <div className={styles.inner}>
           <Reveal className={styles.introPanel} kind="card">
-            <span>Program Overview</span>
-            <h2>Real-life communication skills with global academic value.</h2>
-            <p>
-              The program supports academic, professional, and personal growth by helping learners use English confidently
-              in study, work, travel, and everyday communication.
-            </p>
+            <span>{detail.introEyebrow}</span>
+            <h2>{detail.introTitle}</h2>
+            <p>{detail.introCopy}</p>
           </Reveal>
         </div>
       </section>
@@ -228,45 +331,38 @@ export function CambridgeCourseDetailPage() {
       <section className={styles.benefitsSection}>
         <div className={styles.inner}>
           <div className={styles.benefitGrid}>
-            <BenefitColumn title="Cambridge English Benefits" items={cambridgeBenefits} image={admissionProcessImages[2]} />
-            <BenefitColumn title="NCC Digi School Benefits" items={digiBenefits} image={siteImages.labor} />
+            <BenefitColumn title={detail.benefitOneTitle} items={benefitOneItems} image={media(detail.benefitOneImage)} />
+            <BenefitColumn title={detail.benefitTwoTitle} items={benefitTwoItems} image={media(detail.benefitTwoImage)} />
           </div>
         </div>
       </section>
 
       <ProgressionSection
-        eyebrow="Cambridge Progression Levels"
-        image={siteImages.principal}
-        items={cambridgeLevels}
-        title="A clear pathway from first steps to mastery."
+        eyebrow={detail.extraSectionOneEyebrow || "Cambridge Progression Levels"}
+        image={media(detail.extraSectionOneImage || siteImages.principal)}
+        items={progressionOne}
+        title={detail.extraSectionOneTitle || "A clear pathway from first steps to mastery."}
       />
 
       <ProgressionSection
-        eyebrow="NCC Education Digi School"
-        image={siteImages.vicePrincipal}
-        items={digiLevels}
+        eyebrow={detail.extraSectionTwoEyebrow || "NCC Education Digi School"}
+        image={media(detail.extraSectionTwoImage || siteImages.vicePrincipal)}
+        items={progressionTwo}
         reverse
-        title="Computing pathways for future-ready digital innovators."
+        title={detail.extraSectionTwoTitle || "Computing pathways for future-ready digital innovators."}
       />
 
       <section className={styles.outcomesSection}>
         <div className={styles.inner}>
           <Reveal className={styles.sectionHead}>
-            <span>Fact Framework</span>
-            <h2>Program focus at a glance.</h2>
+            <span>{detail.bottomSectionEyebrow || "Fact Framework"}</span>
+            <h2>{detail.bottomSectionTitle || "Program focus at a glance."}</h2>
           </Reveal>
           <div className={styles.factGrid}>
-            {factFrameworks.map((framework, index) => (
-              <Reveal as="article" className={styles.factCard} delay={revealDelay(index, 0.06)} direction={index ? "right" : "left"} key={framework.feature} kind="card">
-                <h3>{framework.feature}</h3>
-                <dl>
-                  {framework.rows.map(([label, value]) => (
-                    <div key={label}>
-                      <dt>{label}</dt>
-                      <dd>{value}</dd>
-                    </div>
-                  ))}
-                </dl>
+            {frameworkItems.map(([title, rowsText], index) => (
+              <Reveal as="article" className={styles.factCard} delay={revealDelay(index, 0.06)} direction={index ? "right" : "left"} key={title} kind="card">
+                <h3>{title}</h3>
+                <p>{rowsText}</p>
               </Reveal>
             ))}
           </div>
@@ -276,17 +372,22 @@ export function CambridgeCourseDetailPage() {
       <section className={styles.finalSection}>
         <div className={styles.inner}>
           <Reveal className={styles.finalPanel} kind="card">
-            <span>Final Insight</span>
-            <h2>Language confidence and digital fluency prepare students for the world ahead.</h2>
-            <p>
-              Cambridge English builds internationally recognized communication ability, while NCC Digi School equips learners
-              with computing knowledge, creativity, and future-ready digital skills.
-            </p>
+            <span>{detail.finalEyebrow}</span>
+            <h2>{detail.finalTitle}</h2>
+            <p>{detail.finalCopy}</p>
           </Reveal>
         </div>
       </section>
     </>
   );
+}
+
+export function CambridgeCourseDetailPage({ data }) {
+  return <LanguageDigitalDetailPage data={data} detailKey="cambridge-assessment-english" fallback={cambridgeDetail} />;
+}
+
+export function NccDigiCourseDetailPage({ data }) {
+  return <LanguageDigitalDetailPage data={data} detailKey="ncc-digi-school" fallback={nccDetail} />;
 }
 
 function BenefitColumn({ image, items, title }) {

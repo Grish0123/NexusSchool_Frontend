@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { FaBell, FaFileAlt, FaMapMarkerAlt } from "react-icons/fa";
 import { Reveal, revealDelay } from "../components/common/Reveal.jsx";
-import { clubs, courses, heroSlides, media, notices } from "../utils/content";
-import { galleryImages, homeAdvantageImages, homeMomentImages, siteImages } from "../data/siteImages";
+import { clubs, courses, defaultHomeAdvantages, defaultHomeMoments, defaultTestimonials, heroSlides, media, notices } from "../utils/content";
+import { galleryImages, siteImages } from "../data/siteImages";
 import styles from "./HomePage.module.scss";
 
 function HeroTitle({ title }) {
@@ -121,23 +121,9 @@ export function HomePage({ data }) {
     ...courses(data).slice(0, 2),
     ...clubs(data).slice(0, 2)
   ], [data]);
-  const testimonialItems = [
-  [
-    "Alumni Testimonial",
-    "Nexus International School gave me more than just classroom knowledge. The school helped me build discipline, confidence, and a strong academic foundation that continues to support me in my higher studies. The guidance I received from my teachers shaped the way I approach challenges, communicate with others, and work toward my goals.",
-    siteImages.success
-  ],
-  [
-    "Student Testimonial",
-    "Studying at Nexus has made learning feel more comfortable and meaningful for me. The teachers explain lessons clearly, encourage us to ask questions, and support us whenever we need help. The friendly environment, regular activities, and positive school culture have helped me become more confident in my studies and in myself.",
-    siteImages.audience
-  ],
-  [
-    "Parent Testimonial",
-    "As a parent, I have seen a positive change in my child after joining Nexus International School. The school focuses not only on academic progress but also on discipline, confidence, values, and character development. The teachers are caring, approachable, and genuinely involved in each student's growth, which makes us feel confident about our child's future.",
-    siteImages.stage
-  ]
-];
+  const momentItems = data.home?.moments?.length ? data.home.moments : defaultHomeMoments;
+  const advantageItems = data.home?.advantages?.length ? data.home.advantages : defaultHomeAdvantages;
+  const testimonialItems = data.home?.testimonials?.length ? data.home.testimonials : defaultTestimonials;
   const visibleTestimonials = [-1, 0, 1].map((offset) => {
     const index = (activeTestimonial + offset + testimonialItems.length) % testimonialItems.length;
     return { index, item: testimonialItems[index], offset };
@@ -300,18 +286,14 @@ export function HomePage({ data }) {
             <h2>Leadership, celebration, and achievement on the main page.</h2>
           </Reveal>
           <div className={styles.moments}>
-            {[
-              [homeMomentImages[0], "Leadership in Action"],
-              [homeMomentImages[1], "Celebrating Our Culture"],
-              [homeMomentImages[2], "Achievements That Inspire"]
-            ].map(([image, subtitle], index) => (
-              <Reveal as="figure" delay={revealDelay(index)} direction={index === 1 ? "up" : index === 0 ? "left" : "right"} key={image} kind="card" style={{ "--reveal-delay": `${index * 110}ms` }}>
-                <a href="/gallery" aria-label={`Open ${subtitle}`} data-link>
-                  <img src={image} alt={subtitle} />
+            {momentItems.map((item, index) => (
+              <Reveal as="figure" delay={revealDelay(index)} direction={index === 1 ? "up" : index === 0 ? "left" : "right"} key={`${item.title}-${index}`} kind="card" style={{ "--reveal-delay": `${index * 110}ms` }}>
+                <a href="/gallery" aria-label={`Open ${item.subtitle || item.title}`} data-link>
+                  <img src={media(item.image_url || item.image)} alt={item.subtitle || item.title} />
                   <figcaption>
                     <span>{String(index + 1).padStart(2, "0")}</span>
-                    <strong>Nexus Moment</strong>
-                    <small>{subtitle}</small>
+                    <strong>{item.title || "Nexus Moment"}</strong>
+                    <small>{item.subtitle}</small>
                   </figcaption>
                 </a>
               </Reveal>
@@ -380,18 +362,12 @@ export function HomePage({ data }) {
           <h2>Experience the Nexus difference.</h2>
         </Reveal>
         <div className={styles.advantageRows}>
-          {[
-            ["Strong academic foundation", "Disciplined classrooms, clear routines, and caring guidance help students build steady learning habits.", homeAdvantageImages[0]],
-            ["Confidence beyond books", "Events, clubs, presentations, and recognition moments help learners speak, perform, and lead.", homeAdvantageImages[1]],
-            ["Learning with real support", "Teachers and families work together so every child feels noticed, encouraged, and ready for the next step.", homeAdvantageImages[2]],
-            ["Activities with purpose", "Sports, creativity, teamwork, and school culture shape character along with academic progress.", homeAdvantageImages[3]]
-          ].map(([title, copy, image], index) => {
+          {advantageItems.map((item, index) => {
             const imageDirection = index % 2 ? "right" : "left";
             const rowDelay = revealDelay(index, 0.08);
-            const boxOffset = index % 2 ? -120 : 120;
 
             return (
-              <article key={title}>
+              <article key={`${item.title}-${index}`}>
                 <motion.div
                   variants={advantageBoxVariants}
                   initial="hidden"
@@ -400,10 +376,10 @@ export function HomePage({ data }) {
                   style={{ willChange: "transform" }}
                 >
                   <motion.span variants={advantageChildVariants}>Nexus Advantage</motion.span>
-                  <motion.h3 variants={advantageChildVariants}>{title}</motion.h3>
-                  <motion.p variants={advantageChildVariants}>{copy}</motion.p>
+                  <motion.h3 variants={advantageChildVariants}>{item.title}</motion.h3>
+                  <motion.p variants={advantageChildVariants}>{item.copy}</motion.p>
                 </motion.div>
-                <Reveal amount={0.38} as="img" delay={rowDelay} direction={imageDirection} distance={120} effect="translate" kind="image" src={image} alt={title} style={{ "--reveal-delay": `${rowDelay * 1000}ms` }} />
+                <Reveal amount={0.38} as="img" delay={rowDelay} direction={imageDirection} distance={120} effect="translate" kind="image" src={media(item.image_url || item.image)} alt={item.title} style={{ "--reveal-delay": `${rowDelay * 1000}ms` }} />
               </article>
             );
           })}
@@ -421,7 +397,9 @@ export function HomePage({ data }) {
             key={activeTestimonial}
           >
             {visibleTestimonials.map(({ index, item, offset }) => {
-              const [name, quote, image] = item;
+              const name = item.title || item.name;
+              const quote = item.quote || item.message;
+              const image = media(item.image_url || item.image, siteImages.nexusHero);
               return (
               <Reveal as="article" className={offset === 0 ? styles.activeTestimonial : styles.sideTestimonial} key={`${name}-${index}`} kind="card">
                 <img
@@ -440,11 +418,11 @@ export function HomePage({ data }) {
             })}
           </div>
           <div className={styles.testimonialControls}>
-            {testimonialItems.map(([name], index) => (
+            {testimonialItems.map((item, index) => (
               <button
-                aria-label={`Show ${name}`}
+                aria-label={`Show ${item.title || item.name}`}
                 className={index === activeTestimonial ? styles.activeTestimonialDot : ""}
-                key={name}
+                key={item.title || item.name}
                 onClick={() => showTestimonial(index)}
               />
             ))}

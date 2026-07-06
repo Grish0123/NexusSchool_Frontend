@@ -7,13 +7,13 @@ import { AboutPage } from "./pages/AboutPage.jsx";
 import { AdmissionsPage } from "./pages/AdmissionsPage.jsx";
 import { CardsPage } from "./pages/CardsPage.jsx";
 import { ContactPage } from "./pages/ContactPage.jsx";
-import { CambridgeCourseDetailPage, CourseDetailPage } from "./pages/CourseDetailPage.jsx";
+import { CambridgeCourseDetailPage, CourseDetailPage, NccDigiCourseDetailPage } from "./pages/CourseDetailPage.jsx";
 import { GalleryPage } from "./pages/GalleryPage.jsx";
 import { HomePage } from "./pages/HomePage.jsx";
 import { NoticesPage } from "./pages/NoticesPage.jsx";
 import { useSiteData } from "./hooks/useSiteData";
 import { careerItems, clubs, courses, galleryAlbums, heroSlides, media, notices, pageHero } from "./utils/content";
-import { siteImages } from "./data/siteImages";
+import { careerImages, siteImages } from "./data/siteImages";
 import styles from "./styles/App.module.scss";
 
 const PRELOAD_TIMEOUT = 10000;
@@ -138,8 +138,9 @@ export function App() {
           kind="course"
         />
       ),
-      "/courses/cambridge-assessment-english": <CambridgeCourseDetailPage />,
-      "/courses/montessori-ipc": <CourseDetailPage />,
+      "/courses/cambridge-assessment-english": <CambridgeCourseDetailPage data={data} />,
+      "/courses/montessori-ipc": <CourseDetailPage data={data} />,
+      "/courses/ncc-digi-school": <NccDigiCourseDetailPage data={data} />,
       "/clubs": (
         <CardsPage
           data={data}
@@ -170,6 +171,7 @@ export function App() {
         <CardsPage
           data={data}
           hero={pageHero(data, "careers", {
+            careerPhotos: data.careerPhotos?.length ? data.careerPhotos : careerImages,
             copy: "Join a school culture built around discipline, care, excellence, and student growth.",
             eyebrow: "Work With Nexus",
             image_url: siteImages.speaker,

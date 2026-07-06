@@ -1,35 +1,19 @@
 import { FaBuilding, FaEnvelope, FaGlobe, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 import { Reveal, revealDelay } from "../components/common/Reveal.jsx";
+import { defaultContactCampuses } from "../utils/content";
 import styles from "./ContactPage.module.scss";
 
 export function ContactPage({ data }) {
-  const address = "Pepsi-Cola Town Planning, Kathmandu";
-  const phone = "01-4990303 | 01-4991051";
-  const email = "info@nexus.edu.np";
-  const schoolMapSrc = "https://maps.google.com/maps?q=Nexus%20International%20School%20Pepsi-Cola%20Town%20Planning%20Kathmandu&t=&z=16&ie=UTF8&iwloc=&output=embed";
+  const address = data.config?.address || "Pepsi-Cola Town Planning, Kathmandu";
+  const phone = data.config?.contact_phone?.[0] || "01-4990303 | 01-4991051";
+  const email = data.config?.contact_email || "info@nexus.edu.np";
+  const schoolMapSrc = data.mapEmbedUrl || "https://maps.google.com/maps?q=Nexus%20International%20School%20Pepsi-Cola%20Town%20Planning%20Kathmandu&t=&z=16&ie=UTF8&iwloc=&output=embed";
   const contactCards = [
     ["Email Address", email, `mailto:${email}`, FaEnvelope],
     ["Phone Number", phone, "tel:01-4990303", FaPhoneAlt],
     ["Our Location", address, null, FaMapMarkerAlt],
   ];
-  const campuses = [
-    {
-      address,
-      email,
-      name: "Nexus International School",
-      phone: "01-4990303 | 01-4991051",
-      tagline: "Where Excellence Begins!",
-      website: "www.nexus.edu.np"
-    },
-    {
-      address: "Khageshwori, Kathmandu",
-      email: "admin@nexus.edu.np",
-      name: "Nexus IPC Montessori",
-      phone: "01-4990934 | 01-4991051",
-      tagline: "The Foundation of Future Excellence!",
-      website: "www.nexus.edu.np"
-    }
-  ];
+  const campuses = data.contactCampuses?.length ? data.contactCampuses : defaultContactCampuses;
 
   return (
     <>
