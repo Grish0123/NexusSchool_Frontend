@@ -45,12 +45,27 @@ export function compact(value, fallback = '') {
 export function media(value, fallback = siteImages.audience) {
   const raw = compact(value, fallback);
   if (!raw) return fallback;
+
   if (raw.startsWith('https://api.nexus.edu.np/')) {
     return raw.replace('https://api.nexus.edu.np', '');
   }
-  if (/^https?:\/\//.test(raw) || raw.startsWith('/')) return raw;
-  if (raw.startsWith('site-images/')) return `/${raw}`;
-  if (raw.startsWith('media/')) return `/${raw}`;
+
+  if (raw.startsWith('/media/')) {
+    return `https://backend.nexus.edu.np${raw}`;
+  }
+
+  if (raw.startsWith('media/')) {
+    return `https://backend.nexus.edu.np/${raw}`;
+  }
+
+  if (/^https?:\/\//.test(raw) || raw.startsWith('/')) {
+    return raw;
+  }
+
+  if (raw.startsWith('site-images/')) {
+    return `/${raw}`;
+  }
+
   return raw;
 }
 
@@ -96,10 +111,11 @@ export function uniqueBy(items, keyFn) {
 
 export function socialLinks(items = []) {
   return uniqueBy(
-    [...cleanList(items, ['platform_name', 'url']), ...defaultSocialLinks],
-    (item) => item.platform_name || item.platform || item.url,
+    [...cleanList(items, ['platform_name', 'url'])],
+    (item) => item.platform_name || item.platform || item.url
   );
 }
+
 
 export const defaultPageHeroes = {
   about: {

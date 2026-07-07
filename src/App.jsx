@@ -182,7 +182,7 @@ export function App() {
         />
       ),
       "/contact": <ContactPage data={data} />,
-      "/admin": <AdminPage data={data} />
+      "/nexus-control-panel-84": <AdminPage data={data} />
     };
   }, [data]);
 

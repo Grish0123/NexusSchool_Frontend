@@ -616,6 +616,7 @@ export function AdminPage({ data }) {
   const workspaceRef = useRef(null);
   const [isSaving, setIsSaving] = useState(false);
   const [status, setStatus] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [login, setLogin] = useState({ password: "", username: "admin" });
   const [cms, setCms] = useState(() => createCms(data));
   const [dirty, setDirty] = useState(() => new Set());
@@ -642,19 +643,31 @@ export function AdminPage({ data }) {
 
   async function submitLogin(event) {
     event.preventDefault();
+    if (isLoggingIn) return;
+    setIsLoggingIn(true);
     setStatus("Checking login...");
-    const response = await fetch(apiUrl(endpoints.cmsLogin), {
-      body: JSON.stringify(login),
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      method: "POST"
-    });
-    if (!response.ok) {
-      setStatus("Login failed");
-      return;
+    try {
+      const response = await fetch(apiUrl(endpoints.cmsLogin), {
+        body: JSON.stringify(login),
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        method: "POST"
+      });
+      if (!response.ok) {
+        if (response.status >= 500) {
+          setStatus("Login failed. Start the backend server on port 3000, then try again.");
+          return;
+        }
+        setStatus("Login failed. Check username and password.");
+        return;
+      }
+      setAuthenticated(true);
+      setStatus("");
+    } catch {
+      setStatus("Login failed. Start the backend server, then try again.");
+    } finally {
+      setIsLoggingIn(false);
     }
-    setAuthenticated(true);
-    setStatus("");
   }
 
   async function saveCms(event) {
@@ -707,7 +720,7 @@ export function AdminPage({ data }) {
           <h1>Nexus Admin</h1>
           <label><span>Username</span><input value={login.username} onChange={(event) => setLogin({ ...login, username: event.target.value })} /></label>
           <label><span>Password</span><input type="password" value={login.password} onChange={(event) => setLogin({ ...login, password: event.target.value })} /></label>
-          <button>Login</button>
+          <button disabled={isLoggingIn}>{isLoggingIn ? "Logging in..." : "Login"}</button>
           {status && <p className={styles.status}>{status}</p>}
         </form>
       </main>
@@ -723,7 +736,7 @@ export function AdminPage({ data }) {
         </nav>
         <a href="/" data-link>View Site</a>
       </aside>
-      <form className={styles.workspace} onSubmit={saveCms} ref={workspaceRef}>
+      <form className={styles.workspace} onSubmit={(event) => event.preventDefault()} ref={workspaceRef}>
         <header className={styles.topbar}>
           <div>
             <span>Editing</span>
@@ -731,7 +744,7 @@ export function AdminPage({ data }) {
           </div>
           <div className={styles.saveArea}>
             {status && <p className={`${styles.topStatus} ${status.includes("failed") ? styles.topStatusError : ""}`}>{status}</p>}
-            <button className={isSaving ? styles.savingButton : ""} disabled={isSaving}>
+            <button className={isSaving ? styles.savingButton : ""} disabled={isSaving} onClick={saveCms} type="button">
               {isSaving ? "Saving..." : "Save Changes"}
             </button>
           </div>
