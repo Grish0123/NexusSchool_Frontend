@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { Header } from "./components/layout/Header.jsx";
 import { Footer } from "./components/layout/Footer.jsx";
 import { AIChatButton } from "./components/layout/WhatsAppButton.jsx";
+import { Seo } from "./components/common/Seo.jsx";
 import { AdminPage } from "./pages/AdminPage.jsx";
 import { AboutPage } from "./pages/AboutPage.jsx";
 import { AdmissionsPage } from "./pages/AdmissionsPage.jsx";
@@ -68,7 +69,6 @@ function usePath() {
       event.preventDefault();
       window.history.pushState({}, "", href);
       setPath(window.location.pathname);
-      window.scrollTo({ top: 0, behavior: "smooth" });
     };
     document.addEventListener("click", onClick);
     return () => document.removeEventListener("click", onClick);
@@ -83,7 +83,19 @@ export function App() {
   const [assetsLoading, setAssetsLoading] = useState(true);
 
   useEffect(() => {
+    const previousScrollRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+
+    return () => {
+      window.history.scrollRestoration = previousScrollRestoration;
+    };
+  }, []);
+
+  useLayoutEffect(() => {
     document.body.dataset.route = path;
+    window.scrollTo({ left: 0, top: 0, behavior: "auto" });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }, [path]);
 
   useEffect(() => {
@@ -200,6 +212,7 @@ export function App() {
 
   return (
     <div className={styles.appShell}>
+      <Seo path={path} />
       {!isAdmin && <Header activePath={path} config={data.config} social={data.social || []} />}
       {page}
       {!isAdmin && <Footer config={data.config} social={data.social || []} />}

@@ -31,10 +31,16 @@
 
 html {
   scroll-behavior: smooth;
+  /* Prevent off-canvas menus and animated elements from creating a page-wide horizontal scroll area. */
+  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-x: clip;
   color: #172033;
   background: #ffffff;
   font-family: var(--font-body);
