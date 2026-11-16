@@ -16,7 +16,7 @@ import {
 export const routes = [
   ['Home', '/'],
   ['About', '/about'],
-  ['Admission', '/admissions'],
+  ['Admission', '/admission'],
   ['Notices', '/notices'],
   ['Gallery', '/gallery'],
   ['Courses', '/courses'],
@@ -353,14 +353,22 @@ export function applyCms(data) {
 export function heroSlides(data) {
   const slides = data.home?.hero_slider?.length ? data.home.hero_slider : curatedSlides;
   const isCmsControlled = Boolean(data.cms?.homeHeroSlides?.length);
-  return slides.map((slide, index) => ({
-    ...slide,
-    image_url: media(
+  return slides.map((slide, index) => {
+    const image_url = media(
       isCmsControlled
         ? slide.image_url || slide.image || homeHeroImages[index % homeHeroImages.length]
         : homeHeroImages[index % homeHeroImages.length] || slide.image_url || slide.image,
-    ),
-  }));
+    );
+    const sourceId = slide.id || slide.uuid || slide.slug || image_url;
+
+    return {
+      ...slide,
+      image_url,
+      // CMS records keep their own identity. Local fallbacks use their unique
+      // image plus position, so repeated editorial titles remain distinct.
+      slideId: `hero-${sourceId}-${index}`,
+    };
+  });
 }
 
 export function notices(data) {
@@ -469,6 +477,7 @@ export function galleryAlbums(data) {
         .filter(isBrowserImage)
         .filter(Boolean);
       return {
+        albumId: `gallery-${folder.id || folder.uuid || folder.slug || images[0] || index}-${index}`,
         count: `${images.length || 1} photos`,
         image: images[0] || (isBrowserImage(imageValue(folder)) ? media(imageValue(folder)) : ''),
         images,
@@ -503,9 +512,14 @@ export function galleryAlbums(data) {
       images: localGalleryImages,
       title: 'SEE Wishes',
     },
-  ].map((album) => ({ ...album, count: `${album.images.length} photos` }));
+  ].map((album, index) => ({
+    ...album,
+    albumId: `gallery-fallback-${album.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${index}`,
+    count: `${album.images.length} photos`,
+  }));
 
-  return uniqueBy([...mapped, ...fallbackAlbums], (album) => album.title);
+  const mappedTitles = new Set(mapped.map((album) => compact(album.title).toLowerCase()));
+  return [...mapped, ...fallbackAlbums.filter((album) => !mappedTitles.has(compact(album.title).toLowerCase()))];
 }
 
 export function pageHero(data, key, defaults) {

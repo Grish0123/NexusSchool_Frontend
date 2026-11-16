@@ -1,7 +1,10 @@
-import { PageHero } from "../components/common/PageHero.jsx";
-import { Reveal, revealDelay } from "../components/common/Reveal.jsx";
-import { careerImages, clubBookImages } from "../data/siteImages";
-import { imageValue, media } from "../utils/content";
+"use client";
+
+import { PageHero } from "../../components/common/PageHero.jsx";
+import { Reveal, revealDelay } from "../../components/common/Reveal.jsx";
+import { ResponsiveImage } from "../../components/common/ResponsiveImage.jsx";
+import { careerImages, clubBookImages } from "../../data/siteImages";
+import { imageValue, media } from "../../utils/content";
 import styles from "./CardsPage.module.scss";
 
 const courseHeroImage = "/site-images/Nexus.png";
@@ -47,7 +50,9 @@ function CourseHero({ hero }) {
           <a href="/admission" data-link>Start your journey</a>
         </div>
       </Reveal>
-      <Reveal as="img" className={styles.courseKids} delay={0.14} direction="up" distance={78} kind="image" src={courseHeroImage} alt="" aria-hidden="true" />
+      <Reveal as="figure" className={styles.courseKids} delay={0.14} direction="up" distance={78} kind="image">
+        <ResponsiveImage width={1800} height={844} sizes="(max-width: 720px) 112vw, 64vw" priority src={courseHeroImage} alt="" aria-hidden="true" />
+      </Reveal>
     </section>
   );
 }
@@ -76,7 +81,7 @@ function ClubHero({ hero }) {
       <div className={styles.clubSupplies} aria-hidden="true">
         {books.map(([label, image, className], index) => (
           <Reveal as="figure" className={`${styles.clubSupply} ${className}`} delay={revealDelay(index, 0.06)} direction={index % 2 ? "right" : "left"} key={label} kind="card">
-            <img src={image} alt="" />
+            <ResponsiveImage src={image} alt="" width={320} height={420} sizes="(max-width: 720px) 42vw, 180px" />
             <figcaption>{label}</figcaption>
           </Reveal>
         ))}
@@ -98,7 +103,7 @@ function CareerHero({ hero }) {
           const image = typeof item === "string" ? item : item.image_url || item.image;
           return (
           <span className={styles[`careerFace${index + 1}`]} key={image}>
-            <img src={media(image)} alt="" />
+            <ResponsiveImage src={media(image)} alt="" width={420} height={520} sizes="(max-width: 720px) 36vw, 220px" />
           </span>
           );
         })}
@@ -133,7 +138,7 @@ function ClubLogoSlider() {
 
             return (
               <figure className={styles.clubLogoItem} key={`${logo}-${index}`} aria-hidden={index >= clubSlidingLogos.length}>
-                <img src={logo} alt={index < clubSlidingLogos.length ? `${label} club` : ""} />
+                <ResponsiveImage src={logo} alt={index < clubSlidingLogos.length ? `${label} club` : ""} width={230} height={173} sizes="(max-width: 720px) 160px, 230px" />
               </figure>
             );
           })}
@@ -164,7 +169,7 @@ export function CardsPage({ hero, items, kind }) {
 
               return (
                 <Reveal as="article" className={styles.card} delay={revealDelay(index)} direction={index % 3 === 0 ? "left" : index % 3 === 1 ? "up" : "right"} key={`${item.title || item.name}-${index}`} kind="card">
-                  <img src={media(imageValue(item))} alt={item.title || item.name} />
+                  <ResponsiveImage src={media(imageValue(item))} alt={item.title || item.name} width={800} height={540} sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw" />
                   <div>
                     {meta && <span>{meta}</span>}
                     <h3>{item.title || item.name}</h3>

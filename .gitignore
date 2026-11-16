@@ -2,7 +2,8 @@
 node_modules/
 
 # Build output
-
+.next/
+out/
 build/
 
 # Local environment files

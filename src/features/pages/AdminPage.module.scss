@@ -212,7 +212,8 @@
   gap: 10px;
 }
 
-label {
+.adminShell label,
+.loginShell label {
   display: grid;
   gap: 6px;
   min-width: 0;
@@ -229,8 +230,9 @@ label {
   grid-column: span 2;
 }
 
-input,
-textarea {
+.adminShell input,
+.adminShell textarea,
+.loginShell input {
   width: 100%;
   min-width: 0;
   border: 1px solid rgba(19, 43, 69, 0.14);
@@ -242,7 +244,7 @@ textarea {
   font-weight: 650;
 }
 
-textarea {
+.adminShell textarea {
   min-height: 74px;
   resize: vertical;
 }
@@ -612,7 +614,8 @@ textarea {
   opacity: 0.72;
 }
 
-button {
+.adminShell button,
+.loginShell button {
   min-height: 38px;
   border: 1px solid #132b45;
   border-radius: 6px;

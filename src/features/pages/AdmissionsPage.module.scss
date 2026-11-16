@@ -37,8 +37,13 @@
   border-radius: 0 0 8px 8px;
   overflow: hidden;
   isolation: isolate;
-  background: #071426 var(--admission-hero-poster) center / cover no-repeat;
+  background: #071426;
   box-shadow: 0 20px 54px rgba(7, 20, 38, 0.14);
+}
+
+.admissionHeroPoster {
+  z-index: -3;
+  object-fit: cover;
 }
 
 .admissionHeroTrack {

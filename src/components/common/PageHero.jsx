@@ -1,3 +1,5 @@
+"use client";
+
 import { media } from "../../utils/content";
 import { Reveal } from "./Reveal.jsx";
 import styles from "./PageHero.module.scss";

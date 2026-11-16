@@ -1,5 +1,7 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
-import { apiUrl, endpoints } from "../config/api";
+import { apiUrl, endpoints } from "../../config/api";
 import {
   admissionFaqs,
   careerItems,
@@ -19,8 +21,8 @@ import {
   media,
   notices,
   videoMedia
-} from "../utils/content";
-import { careerImages } from "../data/siteImages";
+} from "../../utils/content";
+import { careerImages } from "../../data/siteImages";
 import styles from "./AdminPage.module.scss";
 
 const tabs = ["Home", "About", "Admission", "Notices", "Courses", "Clubs", "Gallery", "Careers", "Contact"];

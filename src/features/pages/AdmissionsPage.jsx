@@ -1,7 +1,10 @@
+"use client";
+
 import { useEffect, useState } from "react";
-import { Reveal, revealDelay } from "../components/common/Reveal.jsx";
-import { admissionFaqs, defaultAdmissionRequirements, defaultAdmissionSteps, media, pageHero, videoMedia } from "../utils/content";
-import { siteImages } from "../data/siteImages";
+import { Reveal, revealDelay } from "../../components/common/Reveal.jsx";
+import { ResponsiveImage } from "../../components/common/ResponsiveImage.jsx";
+import { admissionFaqs, defaultAdmissionRequirements, defaultAdmissionSteps, media, pageHero, videoMedia } from "../../utils/content";
+import { siteImages } from "../../data/siteImages";
 import styles from "./AdmissionsPage.module.scss";
 
 export function AdmissionsPage({ data }) {
@@ -61,7 +64,8 @@ export function AdmissionsPage({ data }) {
 
   return (
     <>
-      <section className={styles.admissionHero} style={{ "--admission-hero-poster": `url("${heroPoster}")` }}>
+      <section className={styles.admissionHero}>
+        <ResponsiveImage className={styles.admissionHeroPoster} fill priority sizes="100vw" src={heroPoster} alt="" aria-hidden="true" />
         <video
           className={`${styles.admissionHeroVideo} ${isHeroVideoReady ? styles.admissionHeroVideoReady : ""}`}
           autoPlay
@@ -71,7 +75,6 @@ export function AdmissionsPage({ data }) {
           onCanPlay={playHeroVideo}
           onError={() => setIsHeroVideoReady(false)}
           onPlaying={() => setIsHeroVideoReady(true)}
-          poster={heroPoster}
           preload="auto"
           aria-hidden="true"
         >
@@ -99,11 +102,13 @@ export function AdmissionsPage({ data }) {
       <section className={styles.processSection}>
         <div className={styles.processBg}>
           {processImages.map((image, index) => (
-            <img
+            <ResponsiveImage
               className={(activeProcessStep === null ? index === 0 : index === activeProcessStep) ? styles.processBgActive : ""}
               src={image}
               alt=""
               aria-hidden="true"
+              fill
+              sizes="100vw"
               key={image}
             />
           ))}

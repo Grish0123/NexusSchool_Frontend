@@ -1,4 +1,7 @@
-export const API_BASE = import.meta.env.VITE_API_BASE || "";
+// Browser requests remain same-origin by default, preserving the existing
+// reverse-proxy and CMS cookie behaviour. Next exposes only explicitly public
+// configuration to browser code.
+export const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "";
 
 export const endpoints = {
   about: "/api/aboutus-page/",

@@ -1,7 +1,10 @@
+"use client";
+
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Reveal, revealDelay } from "../components/common/Reveal.jsx";
-import { leadership, media, pageHero } from "../utils/content";
-import { aboutHeroImages, aboutJourneyImages, siteImages } from "../data/siteImages";
+import { Reveal, revealDelay } from "../../components/common/Reveal.jsx";
+import { ResponsiveImage } from "../../components/common/ResponsiveImage.jsx";
+import { leadership, media, pageHero } from "../../utils/content";
+import { aboutHeroImages, aboutJourneyImages, siteImages } from "../../data/siteImages";
 import styles from "./AboutPage.module.scss";
 
 const focusAreas = [
@@ -122,8 +125,8 @@ export function AboutPage({ data }) {
     <>
       <section className={styles.aboutHero}>
         <div className={styles.aboutHeroTrack} style={{ transform: `translateX(-${activeHero * 100}%)` }}>
-          {heroSlides.map((slide) => (
-            <img src={media(slide.image || slide.image_url)} alt="" aria-hidden="true" key={`${slide.title}-${slide.image || slide.image_url}`} />
+          {heroSlides.map((slide, index) => (
+            <ResponsiveImage width={1800} height={1000} sizes="100vw" priority={index === 0} src={media(slide.image || slide.image_url)} alt="" aria-hidden="true" key={`${slide.title}-${slide.image || slide.image_url}`} />
           ))}
         </div>
         <button
@@ -192,7 +195,9 @@ export function AboutPage({ data }) {
           </Reveal>
           <div className={styles.journeyImageGrid}>
             {journeyImages.map((image, index) => (
-              <Reveal as="img" delay={revealDelay(index, 0.07)} direction={index % 2 ? "right" : "left"} kind="image" src={media(image)} alt={`Nexus journey ${index + 1}`} key={`${image}-${index}`} />
+              <Reveal as="div" className={styles.journeyImage} delay={revealDelay(index, 0.07)} direction={index % 2 ? "right" : "left"} kind="image" key={`${image}-${index}`}>
+                <ResponsiveImage fill sizes="(max-width: 720px) 100vw, (max-width: 960px) 50vw, 40vw" src={media(image)} alt={`Nexus journey ${index + 1}`} />
+              </Reveal>
             ))}
           </div>
         </div>
@@ -237,7 +242,8 @@ export function AboutPage({ data }) {
           </div>
         </div>
       </section>
-      <section className={styles.section}>
+      {/* Leadership messages are intentionally hidden until this section is reinstated. */}
+      {/* <section className={styles.section}>
         <div className={`${styles.inner} ${styles.leadershipSection}`}>
           <Reveal className={`${styles.sectionHead} ${styles.centerHead}`}>
             <span>Messages From Leadership</span>
@@ -258,7 +264,7 @@ export function AboutPage({ data }) {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 }

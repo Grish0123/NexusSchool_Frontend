@@ -1,7 +1,10 @@
+"use client";
+
 import { useState } from "react";
-import { Reveal, revealDelay } from "../components/common/Reveal.jsx";
-import { imageValue, media, pageHero } from "../utils/content";
-import { siteImages } from "../data/siteImages";
+import { Reveal, revealDelay } from "../../components/common/Reveal.jsx";
+import { ResponsiveImage } from "../../components/common/ResponsiveImage.jsx";
+import { imageValue, media, pageHero } from "../../utils/content";
+import { siteImages } from "../../data/siteImages";
 import styles from "./NoticesPage.module.scss";
 
 export function NoticesPage({ data, items }) {
@@ -29,7 +32,7 @@ export function NoticesPage({ data, items }) {
           <div className={styles.topGrid}>
             {selectedNotice && (
               <Reveal as="article" className={styles.featuredCard} direction="left" kind="card">
-                <img src={media(imageValue(selectedNotice), siteImages.labor)} alt={selectedNotice.title} />
+                <ResponsiveImage fill priority sizes="(max-width: 960px) 100vw, 60vw" src={media(imageValue(selectedNotice), siteImages.labor)} alt={selectedNotice.title} />
                 <div>
                   <span>Notice</span>
                   <h2>{selectedNotice.title}</h2>
@@ -53,7 +56,7 @@ export function NoticesPage({ data, items }) {
                     type="button"
                     onClick={() => setSelectedIndex(index)}
                   >
-                    <img src={media(imageValue(notice), siteImages.stage)} alt={notice.title} />
+                    <ResponsiveImage width={184} height={148} sizes="92px" src={media(imageValue(notice), siteImages.stage)} alt={notice.title} />
                     <div>
                       <h3>{notice.title}</h3>
                       <p>{new Date(notice.date).toLocaleDateString()} · School update</p>

@@ -1,6 +1,8 @@
+"use client";
+
 import { FaBuilding, FaEnvelope, FaGlobe, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
-import { Reveal, revealDelay } from "../components/common/Reveal.jsx";
-import { defaultContactCampuses } from "../utils/content";
+import { Reveal, revealDelay } from "../../components/common/Reveal.jsx";
+import { defaultContactCampuses } from "../../utils/content";
 import styles from "./ContactPage.module.scss";
 
 export function ContactPage({ data }) {

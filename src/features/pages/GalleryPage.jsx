@@ -1,8 +1,11 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
 import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa";
-import { Reveal, revealDelay } from "../components/common/Reveal.jsx";
-import { media, pageHero } from "../utils/content";
-import { siteImages } from "../data/siteImages";
+import { Reveal, revealDelay } from "../../components/common/Reveal.jsx";
+import { ResponsiveImage } from "../../components/common/ResponsiveImage.jsx";
+import { media, pageHero } from "../../utils/content";
+import { siteImages } from "../../data/siteImages";
 import styles from "./GalleryPage.module.scss";
 
 export function GalleryPage({ data, items }) {
@@ -60,25 +63,28 @@ export function GalleryPage({ data, items }) {
         <div className={styles.wisdomStage}>
           {mosaicMain && (
             <Reveal className={styles.wisdomMainWrap} direction="up" distance={72} kind="image">
-              <img
+              <ResponsiveImage
                 className={styles.wisdomMain}
                 src={media(mosaicMain)}
                 alt="Nexus International School campus life"
+                width={1434}
+                height={682}
+                sizes="(max-width: 720px) 82vw, 75vw"
+                priority
               />
             </Reveal>
           )}
           {mosaicSideImages.map((image, index) => (
             <Reveal
-              as="img"
+              as="div"
               className={`${styles.wisdomPhoto} ${styles[`wisdomSide${index + 1}`]}`}
               delay={revealDelay(index, 0.05)}
               direction={index < 3 ? "left" : "right"}
               kind="image"
-              src={media(image)}
-              alt=""
-              aria-hidden="true"
               key={`wisdom-side-${image}-${index}`}
-            />
+            >
+              <ResponsiveImage fill sizes="(max-width: 720px) 44vw, 20vw" src={media(image)} alt="" aria-hidden="true" />
+            </Reveal>
           ))}
         </div>
       </section>
@@ -88,7 +94,7 @@ export function GalleryPage({ data, items }) {
             {items.map((item, index) => (
               <button
                 className={index === activeTab ? styles.activeTab : ""}
-                key={item.title}
+                key={item.albumId}
                 onClick={() => setActiveTab(index)}
                 role="tab"
                 type="button"
@@ -103,7 +109,7 @@ export function GalleryPage({ data, items }) {
               <div className={styles.galleryTrack}>
                 {activeImages.map((image, index) => (
                   <Reveal as="button" className={styles.gallerySlide} delay={revealDelay(index, 0.05)} direction={index % 2 ? "right" : "left"} key={`${image}-${index}`} kind="card" onClick={() => openViewer(index)} type="button">
-                    <img src={media(image)} alt={`${activeAlbum.title} ${index + 1}`} />
+                    <ResponsiveImage fill sizes="(max-width: 720px) 78vw, 360px" src={media(image)} alt={`${activeAlbum.title} ${index + 1}`} />
                   </Reveal>
                 ))}
               </div>
@@ -130,7 +136,7 @@ export function GalleryPage({ data, items }) {
               </button>
             </>
           )}
-          <img className={styles.viewerImage} src={media(currentViewerImage)} alt={`${viewer.title} ${viewerIndex + 1}`} />
+          <ResponsiveImage className={styles.viewerImage} width={1600} height={1000} sizes="92vw" src={media(currentViewerImage)} alt={`${viewer.title} ${viewerIndex + 1}`} />
           <div className={styles.viewerDots}>
             {viewerImages.map((image, index) => (
               <button

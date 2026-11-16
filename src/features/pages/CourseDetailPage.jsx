@@ -1,6 +1,9 @@
-import { Reveal, revealDelay } from "../components/common/Reveal.jsx";
-import { admissionProcessImages, courseImages, siteImages } from "../data/siteImages";
-import { media } from "../utils/content";
+"use client";
+
+import { Reveal, revealDelay } from "../../components/common/Reveal.jsx";
+import { ResponsiveImage } from "../../components/common/ResponsiveImage.jsx";
+import { admissionProcessImages, courseImages, siteImages } from "../../data/siteImages";
+import { media } from "../../utils/content";
 import styles from "./CourseDetailPage.module.scss";
 
 const montessoriBenefits = [
@@ -218,7 +221,7 @@ export function CourseDetailPage({ data }) {
             <a href="/contact" data-link>Ask About Admission</a>
           </Reveal>
           <Reveal as="figure" className={styles.heroImage} delay={0.12} direction="right" kind="image">
-            <img src={media(detail.heroImage)} alt="Montessori and IPC classroom learning" />
+            <ResponsiveImage width={1200} height={800} sizes="(max-width: 960px) 100vw, 50vw" priority src={media(detail.heroImage)} alt="Montessori and IPC classroom learning" />
           </Reveal>
         </div>
       </section>
@@ -264,7 +267,7 @@ export function CourseDetailPage({ data }) {
       <section className={styles.blendSection}>
         <div className={styles.inner}>
           <Reveal as="figure" className={styles.blendImage} direction="left" kind="image">
-            <img src={media(detail.bottomSectionImage)} alt="Students learning together at Nexus" />
+            <ResponsiveImage width={1200} height={800} sizes="(max-width: 960px) 100vw, 50vw" src={media(detail.bottomSectionImage)} alt="Students learning together at Nexus" />
           </Reveal>
           <Reveal className={styles.blendCopy} direction="right" distance={54}>
             <span>{detail.bottomSectionEyebrow}</span>
@@ -313,7 +316,7 @@ function LanguageDigitalDetailPage({ data, detailKey = "cambridge-assessment-eng
             <a href="/contact" data-link>Ask About The Program</a>
           </Reveal>
           <Reveal as="figure" className={styles.heroImage} delay={0.12} direction="right" kind="image">
-            <img src={media(detail.heroImage)} alt="Cambridge English learning at Nexus" />
+            <ResponsiveImage width={1200} height={800} sizes="(max-width: 960px) 100vw, 50vw" priority src={media(detail.heroImage)} alt="Cambridge English learning at Nexus" />
           </Reveal>
         </div>
       </section>
@@ -393,7 +396,7 @@ export function NccDigiCourseDetailPage({ data }) {
 function BenefitColumn({ image, items, title }) {
   return (
     <Reveal as="article" className={styles.benefitColumn} kind="card">
-      <img src={image} alt={`${title} at Nexus`} />
+      <ResponsiveImage width={900} height={600} sizes="(max-width: 960px) 100vw, 50vw" src={image} alt={`${title} at Nexus`} />
       <div>
         <span>Key Benefits</span>
         <h2>{title}</h2>
@@ -415,7 +418,7 @@ function ProgressionSection({ eyebrow, image, items, reverse = false, title }) {
     <section className={`${styles.blendSection} ${reverse ? styles.reverseSection : ""}`}>
       <div className={styles.inner}>
         <Reveal as="figure" className={`${styles.blendImage} ${styles.progressionImage}`} direction={reverse ? "right" : "left"} kind="image">
-          <img src={image} alt={title} />
+          <ResponsiveImage width={1200} height={1400} sizes="(max-width: 960px) 100vw, 50vw" src={image} alt={title} />
         </Reveal>
         <Reveal className={styles.blendCopy} direction={reverse ? "left" : "right"} distance={54}>
           <span>{eyebrow}</span>

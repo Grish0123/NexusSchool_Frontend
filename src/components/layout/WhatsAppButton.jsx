@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { FaCompress, FaExpand, FaRobot, FaTimes } from "react-icons/fa";
 import styles from "./Layout.module.scss";

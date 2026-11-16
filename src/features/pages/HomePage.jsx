@@ -1,9 +1,13 @@
+"use client";
+
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { FaBell, FaFileAlt, FaMapMarkerAlt } from "react-icons/fa";
-import { Reveal, revealDelay } from "../components/common/Reveal.jsx";
-import { clubs, courses, defaultHomeAdvantages, defaultHomeMoments, defaultTestimonials, heroSlides, media, notices } from "../utils/content";
-import { galleryImages, siteImages } from "../data/siteImages";
+import { Reveal, revealDelay } from "../../components/common/Reveal.jsx";
+import { ResponsiveImage } from "../../components/common/ResponsiveImage.jsx";
+import { clubs, courses, defaultHomeAdvantages, defaultHomeMoments, defaultTestimonials, heroSlides, media, notices } from "../../utils/content";
+import { galleryImages, siteImages } from "../../data/siteImages";
 import styles from "./HomePage.module.scss";
 
 function HeroTitle({ title }) {
@@ -215,15 +219,16 @@ export function HomePage({ data }) {
             {slides.map((item, index) => (
               <div
                 className={styles.heroSlide}
-                key={item.title}
-                style={{ "--hero-slide-image": `url(${media(item.image_url)})` }}
+                key={item.slideId}
               >
-                <img
+                <Image
                   alt={item.title}
                   className={`${styles.heroSlideImage} ${String(item.image_url).includes("glorious-") ? styles.heroSlideImageContain : ""}`}
-                  decoding="async"
-                  fetchPriority={index === 0 ? "high" : "low"}
-                  loading={index === 0 ? "eager" : "lazy"}
+                  fill
+                  fetchPriority={index === 0 ? "high" : undefined}
+                  preload={index === 0}
+                  quality={88}
+                  sizes="100vw"
                   src={media(item.image_url)}
                 />
               </div>
@@ -245,7 +250,7 @@ export function HomePage({ data }) {
                 aria-label={`Show slide ${index + 1}`}
                 className={index === active ? styles.activeDot : ""}
                 onClick={() => setActive(index)}
-                key={item.title}
+                key={item.slideId}
               />
             ))}
           </div>
@@ -289,7 +294,7 @@ export function HomePage({ data }) {
             {momentItems.map((item, index) => (
               <Reveal as="figure" delay={revealDelay(index)} direction={index === 1 ? "up" : index === 0 ? "left" : "right"} key={`${item.title}-${index}`} kind="card" style={{ "--reveal-delay": `${index * 110}ms` }}>
                 <a href="/gallery" aria-label={`Open ${item.subtitle || item.title}`} data-link>
-                  <img src={media(item.image_url || item.image)} alt={item.subtitle || item.title} />
+                  <ResponsiveImage fill sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 34vw" src={media(item.image_url || item.image)} alt={item.subtitle || item.title} />
                   <figcaption>
                     <span>{String(index + 1).padStart(2, "0")}</span>
                     <strong>{item.title || "Nexus Moment"}</strong>
@@ -344,7 +349,7 @@ export function HomePage({ data }) {
               { description: "A caring environment where guidance, confidence, and everyday learning grow side by side.", image_url: siteImages.audience, title: "Student Life at Nexus" }
             ].map((item, index) => (
               <Reveal as="article" delay={revealDelay(index, 0.06)} direction={index % 2 ? "right" : "left"} key={item.title || item.name} kind="image">
-                <img src={media(item.image_url || item.image)} alt={item.title || item.name} />
+                <ResponsiveImage fill sizes="(max-width: 720px) 100vw, 50vw" src={media(item.image_url || item.image)} alt={item.title || item.name} />
                 <div>
                   <span>{item.category || "Nexus Life"}</span>
                   <h3>{item.title || item.name}</h3>
@@ -379,7 +384,9 @@ export function HomePage({ data }) {
                   <motion.h3 variants={advantageChildVariants}>{item.title}</motion.h3>
                   <motion.p variants={advantageChildVariants}>{item.copy}</motion.p>
                 </motion.div>
-                <Reveal amount={0.38} as="img" delay={rowDelay} direction={imageDirection} distance={120} effect="translate" kind="image" src={media(item.image_url || item.image)} alt={item.title} style={{ "--reveal-delay": `${rowDelay * 1000}ms` }} />
+                <Reveal amount={0.38} as="figure" className={styles.advantageImage} delay={rowDelay} direction={imageDirection} distance={120} effect="translate" kind="image" style={{ "--reveal-delay": `${rowDelay * 1000}ms` }}>
+                  <ResponsiveImage fill sizes="(max-width: 720px) 100vw, 65vw" src={media(item.image_url || item.image)} alt={item.title} />
+                </Reveal>
               </article>
             );
           })}
@@ -402,7 +409,10 @@ export function HomePage({ data }) {
               const image = media(item.image_url || item.image, siteImages.nexusHero);
               return (
               <Reveal as="article" className={offset === 0 ? styles.activeTestimonial : styles.sideTestimonial} key={`${name}-${index}`} kind="card">
-                <img
+                <ResponsiveImage
+                  width={720}
+                  height={480}
+                  sizes="(max-width: 720px) 100vw, 440px"
                   src={image || siteImages.nexusHero}
                   alt={name}
                   onError={(event) => {

@@ -1,6 +1,9 @@
+"use client";
+
 import { routes, socialLinks } from "../../utils/content";
 import { FaFacebookF, FaGlobe, FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 import { Reveal, revealDelay } from "../common/Reveal.jsx";
+import { ResponsiveImage } from "../common/ResponsiveImage.jsx";
 import styles from "./Layout.module.scss";
 
 function SocialIcon({ name }) {
@@ -17,7 +20,10 @@ export function Footer({ config, social }) {
   const slogan = "Where Global Excellence Begins";
   const mainPhone = "01-4990303 | 01-4991051";
   const mainEmail = "info@nexus.edu.np";
-  const footerSocial = socialLinks(social).slice(0, 4);
+  const footerSocial = socialLinks([
+    ...social,
+    { platform_name: "YouTube", url: "https://www.youtube.com/@nexusinternationalacademy4360" },
+  ]).slice(0, 5);
   const footerGroups = [
     ["Explore", routes.slice(0, 4)],
     ["Nexus", routes.slice(4, 8)]
@@ -36,13 +42,13 @@ export function Footer({ config, social }) {
       </section>
       <div className={styles.footerGrid}>
         <Reveal as="section" direction="left" kind="soft">
-          <img src="/site-images/Logo Nexus.png" alt={`${schoolName} logo`} />
+          <ResponsiveImage src="/site-images/Logo Nexus.png" alt={`${schoolName} logo`} width={96} height={96} sizes="96px" />
           <h2>{schoolName}</h2>
           <p>{slogan}</p>
           <p>Pepsi-Cola Town Planning, Kathmandu</p>
           <div className={styles.socialIcons}>
             {footerSocial.map((item) => (
-              <a href={item.url} key={item.url} rel="noreferrer" target="_blank" aria-label={item.platform_name || item.platform || "Social"}>
+              <a href={item.url} key={item.url} rel="noreferrer" target="_blank" aria-label={`Visit Nexus International Academy on ${item.platform_name || item.platform || "social media"} (opens in a new tab)`}>
                 <SocialIcon name={item.platform_name || item.platform} />
               </a>
             ))}

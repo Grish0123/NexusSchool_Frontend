@@ -1,0 +1,2 @@
+const routes = ["", "/about", "/admission", "/notices", "/gallery", "/courses", "/courses/cambridge-assessment-english", "/courses/montessori-ipc", "/courses/ncc-digi-school", "/clubs", "/student-life", "/careers", "/contact"];
+export default function sitemap() { return routes.map((route) => ({ url: `https://www.nexus.edu.np${route || "/"}`, changeFrequency: route === "" ? "weekly" : "monthly", priority: route === "" ? 1 : 0.7 })); }
