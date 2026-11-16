@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const SITE_URL = 'https://www.nexus.edu.np';
+const SITE_URL = 'https://nexus.edu.np';
 const SCHOOL_NAME = 'Nexus International School';
 const DEFAULT_DESCRIPTION =
   'Nexus International School in Pepsi-Cola Town Planning, Kathmandu — a future-ready school where learners build confidence, creativity, values, and academic excellence.';
