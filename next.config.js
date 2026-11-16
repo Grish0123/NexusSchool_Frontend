@@ -5,6 +5,16 @@ const nextConfig = {
     webpackBuildWorker: false,
   },
 
+  async redirects() {
+    return [
+      {
+        source: '/index.html',
+        destination: '/',
+        permanent: true,
+      },
+    ];
+  },
+
   images: {
     deviceSizes: [360, 390, 430, 640, 768, 1024, 1280, 1536, 1920],
     imageSizes: [48, 64, 96, 128, 192, 256, 384],
