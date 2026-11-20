@@ -1,0 +1,46 @@
+name: Nexus Frontend Production Build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout frontend
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Security audit
+        run: npm audit --omit=dev --audit-level=moderate
+
+      - name: Build Next.js
+        env:
+          NEXT_PUBLIC_API_BASE: https://backend.nexus.edu.np
+          API_BASE: https://backend.nexus.edu.np
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: npm run build
+
+      - name: Package production output
+        run: |
+          tar -czf frontend-build.tar.gz .next public package.json package-lock.json next.config.js
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexus-frontend-build
+          path: frontend-build.tar.gz
+          retention-days: 7
